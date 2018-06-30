@@ -1,6 +1,6 @@
 {
   "name": "javascript-algebra",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "алгебраические методы для 2d и 3d графики",
   "main": "index.js",
   "scripts": {

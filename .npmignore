@@ -1,3 +1,4 @@
 .eslintrc
 .vscode/
+.babelrc
 node_modules/

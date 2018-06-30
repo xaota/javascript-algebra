@@ -973,6 +973,20 @@
       return Matrix.from(s, u, f.reverse()).transpose().resize(4, 4).set(3, 3, 1).translate(eye.reverse());
     }
 
+  /** Матрица @2d трансформаций [[a,b,0], [c,d,0], [e,f,1]]
+    * @param {number} a (m11) Horizontal scaling
+    * @param {number} b (m12) Horizontal skewing
+    * @param {number} c (m21) Vertical skewing
+    * @param {number} d (m22) Vertical scaling
+    * @param {number} e (dx) Horizontal moving
+    * @param {number} f (dy) Vertical moving
+    * @return {Matrix} матрица (3,3) для 2d трансформации
+    */
+    static transform2(a, b, c, d, e, f) {
+      const array = [a,b,0, c,d,0, e,f,1];
+      return new Matrix(array, 3, 3);
+    }
+
   /** Применение метода Гаусса
     * @param {Matrix} matrix левая часть системы уравнений Ax = B с матрицей A и вектором B @required
     * @param {number} w количество столбцов матрицы

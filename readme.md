@@ -1,5 +1,10 @@
 Алгебраические методы для 2d и 3d графики
 
+### Установка
+```bash
+$ npm install javascript-algebra
+```
+
 ### Использование
 ```javascript
 import {Vector, Quatern, Matrix} from 'javascript-algebra';
