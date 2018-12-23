@@ -408,7 +408,7 @@
     * @return {Vector} вектор суммы
     */
     static addition(dimension = 0, ...vectors) {
-      if (vectors.length === 0) return dimension
+      if (vectors.length === 0) return dimension > 0
         ? Vector.empty(dimension)
         : null;
       const head = vectors[0];
@@ -426,18 +426,20 @@
   }
 
   /** @subsection @const Частые значения */
-    Vector.x = Vector.basis(2, 0);
-    Vector.y = Vector.basis(2, 1);
-    Vector.X = Vector.basis(3, 0);
-    Vector.Y = Vector.basis(3, 1);
-    Vector.Z = Vector.basis(3, 2);
-    Vector.zero = Vector.empty(2);
-    Vector.ZERO = Vector.empty(3);
+    Vector.x     = Vector.basis(2, 0);
+    Vector.y     = Vector.basis(2, 1);
+    Vector.X     = Vector.basis(3, 0);
+    Vector.Y     = Vector.basis(3, 1);
+    Vector.Z     = Vector.basis(3, 2);
+    Vector.zero  = Vector.empty(2);
+    Vector.ZERO  = Vector.empty(3);
     Vector.flipX = Vector.from(-1,  1);
     Vector.flipY = Vector.from( 1, -1);
     Vector.FlipX = Vector.from(-1,  1,  1);
     Vector.FlipY = Vector.from( 1, -1,  1);
     Vector.FlipZ = Vector.from( 1,  1, -1);
+    Vector.one   = Vector.from(1, 1);
+    Vector.ONE   = Vector.from(1, 1, 1);
 
 /** @section @private */
   const vectorIndex = 'xyzw';
