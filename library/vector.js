@@ -12,7 +12,7 @@
   * @field {natural} dimension размерность вектора
   * @field {Float32Array} data координаты вектора
   */
- export default class Vector {
+  export default class Vector {
   /** {Vector} Вектор из массива координат @constructor
     * @param {Float32Array} array данные координат вектора
     */
@@ -138,6 +138,18 @@
     */
     reverse() {
       return new Vector(this.data.map(e => -e));
+    }
+
+  /** Вектор из компонент в обратном порядке
+    * @return {Vector} (-vector)
+    */
+    inverse() {
+      return new Vector(this.data.reverse());
+    }
+
+  /** Половина вектора */
+    half() {
+      return new Vector(this.data.map(e => e / 2));
     }
 
   /** @subsection Аггрегирующие функции */
@@ -360,7 +372,7 @@
     * @return {Boolean} true, если векторы близкие
     */
     static compare(A, B, precision = 0.0001) {
-      return A.data.every((e, i) => e - B.data[i] < precision);
+      return A.data.every((e, i) => Math.abs(e - B.data[i]) < precision);
     }
 
   /** Вектор отношения двух векторов (одинаковых размерностей)
@@ -438,8 +450,10 @@
     Vector.FlipX = Vector.from(-1,  1,  1);
     Vector.FlipY = Vector.from( 1, -1,  1);
     Vector.FlipZ = Vector.from( 1,  1, -1);
-    Vector.one   = Vector.from(1, 1);
-    Vector.ONE   = Vector.from(1, 1, 1);
+    Vector.one   = Vector.identity(2);
+    Vector.ONE   = Vector.identity(3);
+    Vector.half  = Vector.from(0.5, 0.5);
+    Vector.HALF  = Vector.from(0.5, 0.5, 0.5);
 
 /** @section @private */
   const vectorIndex = 'xyzw';
