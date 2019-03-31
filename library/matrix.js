@@ -663,6 +663,30 @@
       return this.transpose().additionCol(a, b, factor).transpose();
     }
 
+  /** Применение преобразований (вектор -> вектор) / transition
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    transition(vector) {
+      return Matrix.transition(this, vector);
+    }
+
+  /** Применение преобразований (вектор -> вектор) (через обратную матрицу) / transitionInverse @slow
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    transitionInverse(vector) {
+      return Matrix.transitionInverse(this, vector);
+    }
+
+  /** Применение преобразований (вектор -> вектор) (через обратную матрицу @3D) / transitionInverse3D @slow
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    transitionInverse3D(vector) {
+      return Matrix.transitionInverse3D(this, vector);
+    }
+
   /** @subsection @method @static */
   /** Матрица из набора векторов
     * @arguments {Vector} векторы-столбцы матрицы (размерности должны совпадать)
@@ -756,7 +780,7 @@
       return Matrix.diagonalDown(Vector.identity(dimension));
     }
 
-  /** Матрица переноса
+  /** Матрица переноса / translate
     * @param  {Vector} vector координаты переноса
     * @return {Matrix} размерность на 1 больше размерности вектора
     */
@@ -816,7 +840,7 @@
       return Matrix.translate(new Vector([0, y, z]));
     }
 
-  /** Матрица масштабирования
+  /** Матрица масштабирования / scale
     * @param {Vector} vector коэффициенты масштабирования
     * @return {Matrix} матрица размерностю на 1 большей размерности вектора
     */
@@ -1033,5 +1057,32 @@
         history,
         swap
       }
+    }
+
+  /** Применение преобразований (вектор -> вектор) / transition
+    * @param {Matrix} matrix матрица СК
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    static transition(matrix, vector) {
+      return matrix.vectorCol(vector).vector();
+    }
+
+  /** Применение преобразований (вектор -> вектор) (через обратную матрицу) / transitionInverse @slow
+    * @param {Matrix} matrix матрица СК
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    static transitionInverse(matrix, vector) {
+      return Matrix.transition(matrix.inverse(), vector);
+    }
+
+  /** Применение преобразований (вектор -> вектор) (через обратную матрицу @3D) / transitionInverse3D @slow
+    * @param {Matrix} matrix матрица СК
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    static transitionInverse3D(matrix, vector) {
+      return Matrix.transition(matrix.inverse3D(), vector);
     }
   }
