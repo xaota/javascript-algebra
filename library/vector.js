@@ -21,7 +21,16 @@
       this.dimension = array.length;
     }
 
-  /** @subsection @field Индексы вектора по осям */
+/** @subsection @field Индексы вектора по осям */
+/** Вывод вектора в терминал @debug
+  * @param {natural} precision количество знаков после запятой в значениях элементов матрицы
+  * @return {string} @multiline
+  */
+   toString(precision = 2) {
+    const data = Array.from(this.data, e => e.toFixed(precision));
+    return '{' + data.join(', ') + '}';
+  }
+
   /** Значение по оси X
     * @return {number} значение компоненты
     */
@@ -147,7 +156,9 @@
       return new Vector(this.data.reverse());
     }
 
-  /** Половина вектора */
+  /** Половина исходного вектора
+    * @return {Vector} вектор половинного размера
+    */
     half() {
       return new Vector(this.data.map(e => e / 2));
     }
@@ -203,6 +214,16 @@
       const data = new Float32Array(dimension), n = Math.min(dimension, this.dimension);
       for (let i = 0; i < n; ++i) data[i] = this.data[i];
       return new Vector(data);
+    }
+
+  /** Изменение размерности вектора c дополнением единицами
+    * уменьшение - хвостовые значения отбрасываются
+    * увеличение - координаты инициализируются единицами
+    * @param {natural} dimension размерность вектора
+    * @return {Vector} вектор новой размерности
+    */
+    resizeIdentity(dimension) {
+      return Vector.identity(dimension).fill(0, ...this.data);
     }
 
   /** Заполнение координат вектора новыми значениями
@@ -300,6 +321,25 @@
     multiplicate(vector) {
       const n = Vector.dimension(this, vector);
       return this.resize(n).multiplication(vector.resize(n));
+    }
+
+  /** Вращение вектора @2d
+    * @param {number} angle угол поворота @radians
+    * @return {Vector} вектор после поворота
+    */
+    rotate2d(angle) {
+      const x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
+      const y = this.x * Math.sin(angle) + this.y * Math.cos(angle);
+      return Vector.from(x, y);
+    }
+
+  /** Вращение вектора @3d @TODO:
+    * @param {number} angle угол поворота @radians
+    * @return {Vector} @this
+    */
+    rotate3D(angle) {
+      // ...
+      return this;
     }
 
   /** @subsection @export */
