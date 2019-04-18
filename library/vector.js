@@ -21,15 +21,15 @@
       this.dimension = array.length;
     }
 
-/** @subsection @field Индексы вектора по осям */
-/** Вывод вектора в терминал @debug
-  * @param {natural} precision количество знаков после запятой в значениях элементов матрицы
-  * @return {string} @multiline
-  */
-   toString(precision = 2) {
-    const data = Array.from(this.data, e => e.toFixed(precision));
-    return '{' + data.join(', ') + '}';
-  }
+  /** @subsection @field Индексы вектора по осям */
+  /** Вывод вектора в терминал @debug
+    * @param {natural} precision количество знаков после запятой в значениях элементов матрицы
+    * @return {string} @multiline
+    */
+    toString(precision = 2) {
+      const data = Array.from(this.data, e => e.toFixed(precision));
+      return '{' + data.join(', ') + '}';
+    }
 
   /** Значение по оси X
     * @return {number} значение компоненты
@@ -370,12 +370,13 @@
       return new Vector(new Float32Array(dimension)); // auto.fill(0)
     }
 
-  /** Вектор любой размерности, все элементы которого единицы
+  /** Вектор любой размерности, все элементы которого одинаковые
     * @param {natural} dimension размерность вектора
+    * @param {number} value значение элементов вектора
     * @return {Vector} вектор с единиичными компонентами
     */
-    static identity(dimension) {
-      return new Vector((new Float32Array(dimension)).fill(1));
+    static identity(dimension, value = 1) {
+      return new Vector((new Float32Array(dimension)).fill(value));
     }
 
   /** Единичный (базисный) вектор любой размерности
