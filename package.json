@@ -1,8 +1,9 @@
 {
   "name": "javascript-algebra",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "алгебраические методы для 2d и 3d графики",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/xaota/javascript-algebra/issues"
   },
-  "homepage": "https://github.com/xaota/javascript-algebra#readme"
+  "homepage": "https://github.com/xaota/javascript-algebra#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1"
+  }
 }
