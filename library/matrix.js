@@ -24,7 +24,7 @@
   * @field width  {natural} количество столбцов (ширина)
   * @field data {Float32Array} элементы матрицы (по столбцам)
   */
- export default class Matrix {
+  export default class Matrix {
   /** Матрица из элементов массива параметра
     * @param {Float32Array} array данные элементов матрицы (по столбцам)
     * @param {natural} height количество строк    (высота)
@@ -596,6 +596,19 @@
       return new Matrix(array, m, n);
     }
 
+  /** Минор матрицы любого порядка
+    * @param {Vector} from левый верхний элемент минора
+    * @param {Vector} to правый нижний элемент минора
+    * @return {Matrix} минор матрицы
+    */
+    minore(from = Vector.zero, to = Vector.from(this.height, this.width)) {
+      const h = this.height, w = this.width;
+      const items = (count, point = 0) => Array.from(new Array(count), (_, i) => point + i);
+      const rows = items(from.x).concat(items(h - to.x, to.x));
+      const cols = items(from.y).concat(items(w - to.y, to.y));
+      return this.minors(rows, cols);
+    }
+
   /** Решение СЛАУ (методом Гаусса)
     * @param {Vector} vector правая часть системы уравнений Ax = B с матрицей A и вектором B @required
     * @return {Vector} решение СЛАУ
@@ -731,6 +744,30 @@
     static empty(height, width = height) {
       const array = new Float32Array(height * width);
       return new Matrix(array, height, width);
+    }
+
+  /** Матрица из случайных элементов [0..1)
+    * @param {number} height количество строк
+    * @param {number} width  количество столбцов
+    * @return {Matrix} рандомная матрица
+    */
+    static random(height, width = height) {
+      const data = Array.from(new Array(height * width), Math.random);
+      return new Matrix(data, height, width);
+    }
+
+  /** Разряженная матрица
+    * @param {array} data ненулевые элементы [...[row, col, value]]
+    * @param {number} height количество строк
+    * @param {number} width  количество столбцов
+    * @return {Matrix} разряженная матрица
+    */
+    static sparse(data, height, width) {
+      const matrix = Matrix.empty(height, width);
+      data.forEach(([row, col, value]) => {
+        matrix.data[height * col + row] = value;
+      });
+      return matrix;
     }
 
   /** Диагональная матрица из вектора
