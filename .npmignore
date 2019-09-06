@@ -1,6 +1,8 @@
 .eslintrc
 .vscode/
 .babelrc
+.prettierrc.json
+
 node_modules/
 .history/
 .DS_Store

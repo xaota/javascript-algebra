@@ -111,6 +111,14 @@
         : -1;
     }
 
+  /** Проверка на единичный базисный вектор определенной оси
+    * @param {number} index номер проверяемой оси
+    * @return {Boolean} true, если все компоненты вектора нули, кроме index
+    */
+    axis(index) {
+      return this.data.indexOf(1) === index && this.basis();
+    }
+
   /** Норма вектора
     * @return {number} значение нормы вектора
     */
@@ -171,14 +179,14 @@
       return Math.max(...this.data, 0);
     }
 
-    /** Минимальный компонент вектора
+  /** Минимальная компонента вектора
     * @return {number} Значение минимальной компоненты или 0
     */
     min() {
       return Math.min(...this.data, 0);
     }
 
-  /** Среднее всех компонентов вектора
+  /** Среднее всех компонент вектора
     * @return {number} значение среднего
     */
     average() {
@@ -204,6 +212,7 @@
       return new Vector(this.data.map(e => e === 0 ? e : level));
     }
 
+  /** @subsection Дополнительные функции */
   /** Изменение размерности вектора @todo
     * уменьшение - хвостовые значения отбрасываются
     * увеличение - координаты инициализируются нулями
@@ -237,6 +246,7 @@
       return new Vector(data);
     }
 
+  /** @subsection Основные функции */
   /** Умножение вектора на скаляр (масштабирование вектора)
     * @param {number} factor множитель (коэффициент масштабирования)
     * @return {Vector} новый вектор с новыми значениями координат
@@ -333,7 +343,7 @@
       return Vector.from(x, y);
     }
 
-  /** Вращение вектора @3d @TODO:
+  /** Вращение вектора @3d @TODO: создать метод
     * @param {number} angle угол поворота @radians
     * @return {Vector} @this
     */
@@ -354,7 +364,7 @@
     }
 
   /** @subsection @method @static */
-  /** Вектор из переданных параметров
+  /** Вектор из переданных параметров / from @static
     * @param {...number} coord координаты
     * @return {Vector} вектор
     */
@@ -362,7 +372,7 @@
       return new Vector(coord);
     }
 
-  /** Нулевой (пустой) вектор любой размерности
+  /** Нулевой (пустой) вектор любой размерности / empty @static
     * @param {natural} dimension размерность вектора
     * @return {Vector} нулевой вектор
     */
@@ -479,21 +489,23 @@
   }
 
   /** @subsection @const Частые значения */
+  /** 2D */
     Vector.x     = Vector.basis(2, 0);
     Vector.y     = Vector.basis(2, 1);
+    Vector.zero  = Vector.empty(2);
+    Vector.flipX = Vector.from(-1,  1);
+    Vector.flipY = Vector.from( 1, -1);
+    Vector.one   = Vector.identity(2);
+    Vector.half  = Vector.from(0.5, 0.5);
+  /** 3D */
     Vector.X     = Vector.basis(3, 0);
     Vector.Y     = Vector.basis(3, 1);
     Vector.Z     = Vector.basis(3, 2);
-    Vector.zero  = Vector.empty(2);
     Vector.ZERO  = Vector.empty(3);
-    Vector.flipX = Vector.from(-1,  1);
-    Vector.flipY = Vector.from( 1, -1);
     Vector.FlipX = Vector.from(-1,  1,  1);
     Vector.FlipY = Vector.from( 1, -1,  1);
     Vector.FlipZ = Vector.from( 1,  1, -1);
-    Vector.one   = Vector.identity(2);
     Vector.ONE   = Vector.identity(3);
-    Vector.half  = Vector.from(0.5, 0.5);
     Vector.HALF  = Vector.from(0.5, 0.5, 0.5);
 
 /** @section @private */

@@ -12,7 +12,7 @@
 /** {Quatern} Работа с кватернионами @export @class
   * @field x y z w {number} элементы кватерниона
   */
- export default class Quatern {
+  export default class Quatern {
   /** {Quatern} Кватернион из элементов-параметров @constructor
     * @param {number} x элемент кватерниона
     * @param {number} y элемент кватерниона
