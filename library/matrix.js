@@ -158,6 +158,7 @@
       return new Matrix(array, h, w);
     }
 
+  /** @subsection Основные методы */
   /** Умножение матрицы на скаляр
     * @param {number} factor коэффициент изменения элементов матрицы
     * @return {Matrix} новая матрица с измененными компонентами
@@ -417,7 +418,7 @@
     }
 
   /** Операция поворота координат @2d
-    * @param {number} angle угол поворота
+    * @param {number} angle угол поворота (в радианах)
     * @return {Matrix} матрица после поворота координат
     */
     rot(angle) {
@@ -576,18 +577,18 @@
     }
 
   /** Минор матрицы любого порядка по строкам и столбцам (получаемый минор должен существовать)
-    * @param {array} row {...natural} номера исключаемых строк
-    * @param {array} col {...natural} номера исключаемых столбцов
+    * @param {array} rows {...natural} номера исключаемых строк
+    * @param {array} cols {...natural} номера исключаемых столбцов
     * @return {Matrix} минор
     */
-    minors(row, col) {
+    minors(rows, cols) {
       const h = this.height, w = this.width;
-      const m = h - row.length, n = w - col.length, array = new Float32Array(m * n);
+      const m = h - rows.length, n = w - cols.length, array = new Float32Array(m * n);
       let i = 0, y = 0, j, x;
       for (; i < w; ++i) {
-        if (col.indexOf(i) > -1) ++y; else {
+        if (cols.indexOf(i) > -1) ++y; else {
           for (j = 0, x = 0; j < h; ++j) {
-            if (row.indexOf(j) > -1) ++x; else {
+            if (rows.indexOf(j) > -1) ++x; else {
               array[(i - y) * m + (j - x)] = this.data[i * h + j];
             }
           }
@@ -1021,7 +1022,7 @@
       return Matrix.frustum(fovy, aspect, -fovy, -aspect, near, far);
     }
 
-  /** Матрица вида @3d
+  /** Матрица вида @3d / видовая матрица, матрица камеры
     * @param {Vector} eye начало координат системы наблюдения
     * @param {Vector} center опорная точка
     * @param {Vector} up верктор "вверх"
