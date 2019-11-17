@@ -19,7 +19,7 @@
   import Vector  from './vector.js';
   import Quatern from './quatern.js';
 
-/** @section {Matrix}  Работа с матрицами @export @class
+/** @section {Matrix} Работа с матрицами @export @class
   * @field height {natural} количество строк    (высота)
   * @field width  {natural} количество столбцов (ширина)
   * @field data {Float32Array} элементы матрицы (по столбцам)
@@ -702,6 +702,16 @@
     }
 
   /** @subsection @method @static */
+  /** Сравнение двух матриц
+    * @param {Matrix} A сравниваемые матрицы
+    * @param {Matrix} B сравниваемые матрицы
+    * @param {number} precision точность
+    * @return {Boolean} true, если матрицы близкие
+    */
+    static compare(A, B, precision = 0.0001) {
+      return A.height === B.height && A.width === B.width && A.data.every((e, i) => Math.abs(e - B.data[i]) < precision);
+    }
+
   /** Матрица из набора векторов
     * @arguments {Vector} векторы-столбцы матрицы (размерности должны совпадать)
     * @return {Matrix} матрица

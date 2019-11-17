@@ -305,15 +305,16 @@ const matx = matrix.minors(rows, cols) // Минор матрицы любого
 const matx = matrix.minore(from, to)   // Минор матрицы любого порядка (from, to: Vector{x, y})
 
 /** Дополнительные методы (const matrix = new Matrix(...)) */
-const copy   = matrix.copy()                  // Копирование матрицы
-const string = matrix.toString(precision = 2) // Вывод матрицы в терминал @debug
-const vector = matrix.vector()                // Вектор из элементов матрицы
-const vector = matrix.element(start, count)   // Возврат элементов матрицы с любого места (по столбцам)
-const matx   = matrix.fill(start, array)      // Заполнение элементов с любого места (по столбцам)
-const number = matrix.get(row, col)           // Получение конкретного элемента матрицы
-const matx   = matrix.set(row, col, value)    // Установка конкретного элемента матрицы
+const compare = Matrix.compare(A, B, precision = 0.0001) // -> boolean (сравнение матриц)
+const copy    = matrix.copy()                  // Копирование матрицы
+const string  = matrix.toString(precision = 2) // Вывод матрицы в терминал @debug
+const vector  = matrix.vector()                // Вектор из элементов матрицы
+const vector  = matrix.element(start, count)   // Возврат элементов матрицы с любого места (по столбцам)
+const matx    = matrix.fill(start, array)      // Заполнение элементов с любого места (по столбцам)
+const number  = matrix.get(row, col)           // Получение конкретного элемента матрицы
+const matx    = matrix.set(row, col, value)    // Установка конкретного элемента матрицы
 
-const matx   = matrix.resize(height, width)   // Изменение размеров матрицы
+const matx    = matrix.resize(height, width)   // Изменение размеров матрицы
 
 /** Элементарные преобразования */
 const matx = matrix.swapCol(a, b) // Обмен столбцов с номерами a и b
