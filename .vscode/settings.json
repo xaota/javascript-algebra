@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "**/.history": true
+  },
+  "files.watcherExclude": {
+    "**/.history": true,
+    "**/dist/*": true
+  },
+  "search.exclude": {
+    "**/.history": true,
+    "**/dist/*": true
+  }
+}
