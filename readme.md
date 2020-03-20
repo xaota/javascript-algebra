@@ -6,7 +6,7 @@
 $ npm install javascript-algebra
 ```
 
-## Использование
+## Настройка
 > importmaps
 ```html
 <script type="importmap">
@@ -18,6 +18,21 @@ $ npm install javascript-algebra
 }
 </script>
 ```
+
+### Дополнительно
+Если вы используете vscode, можно настроить резолв для корректной работы самого редактора с помощью файла `jsconfig.json`
+```json
+{
+  "compilerOptions": {
+    "baseUrl": "../node_modules/",
+    "paths": {
+      "javascript-algebra/*": ["./javascript-algebra/library/*"]
+    }
+  }
+}
+```
+
+## Использование
 
 ```javascript
 import {Vector, Quatern, Matrix} from 'javascript-algebra';
