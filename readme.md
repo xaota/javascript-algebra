@@ -6,7 +6,19 @@
 $ npm install javascript-algebra
 ```
 
-## Использование (node.js)
+## Использование
+> importmaps
+```html
+<script type="importmap">
+{
+  "imports": {
+    "javascript-algebra": "/javascript-algebra/index.js",
+    "javascript-algebra/": "/javascript-algebra/library/"
+  }
+}
+</script>
+```
+
 ```javascript
 import {Vector, Quatern, Matrix} from 'javascript-algebra';
 
@@ -14,11 +26,6 @@ Vector
   .from(1, 2, 3) // -> Vector @3d {x: 1,  y: 0,  z: 0}
   .scale(10);    //    Vector @3d {x: 10, y: 20, z: 30}
 ...
-```
-
-## Использование (browser)
-```javascript
-import {Vector, Quatern, Matrix} from '/javascript-algebra/index.js';
 
 Matrix.identity(10) // -> Matrix {height: 10, width: 10}
 ...
@@ -42,30 +49,33 @@ const basis    = Vector.basis(n, index)    // вектор размерност�
 
 /** Частые значения (статические значения) */
 /** 2D */
-Vector.x     = Vector.basis(2, 0)
-Vector.y     = Vector.basis(2, 1)
-Vector.zero  = Vector.empty(2)
-Vector.flipX = Vector.from(-1,  1)
-Vector.flipY = Vector.from( 1, -1)
-Vector.one   = Vector.identity(2)
-Vector.half  = Vector.from(0.5, 0.5)
+Vector.x        = Vector.basis(2, 0)
+Vector.y        = Vector.basis(2, 1)
+Vector.zero     = Vector.empty(2)
+Vector.flipX    = Vector.from(-1,  1)
+Vector.flipY    = Vector.from( 1, -1)
+Vector.one      = Vector.identity(2)
+Vector.half     = Vector.from(0.5, 0.5)
+Vector.infinity = Vector.from(Infinity, Infinity)
 
 /** 3D */
-Vector.X     = Vector.basis(3, 0)
-Vector.Y     = Vector.basis(3, 1)
-Vector.Z     = Vector.basis(3, 2)
-Vector.ZERO  = Vector.empty(3)
-Vector.FlipX = Vector.from(-1,  1,  1)
-Vector.FlipY = Vector.from( 1, -1,  1)
-Vector.FlipZ = Vector.from( 1,  1, -1)
-Vector.ONE   = Vector.identity(3)
-Vector.HALF  = Vector.from(0.5, 0.5, 0.5)
+Vector.X        = Vector.basis(3, 0)
+Vector.Y        = Vector.basis(3, 1)
+Vector.Z        = Vector.basis(3, 2)
+Vector.ZERO     = Vector.empty(3)
+Vector.FlipX    = Vector.from(-1,  1,  1)
+Vector.FlipY    = Vector.from( 1, -1,  1)
+Vector.FlipZ    = Vector.from( 1,  1, -1)
+Vector.ONE      = Vector.identity(3)
+Vector.HALF     = Vector.from(0.5, 0.5, 0.5)
+Vector.INFINITY = Vector.from(Infinity, Infinity, Infinity)
 
 /** Создание вектора для частых задач */
 const vector = Vector.to(A, B)        // Вектор из точки A в B; A и B элементы Vector // B - A
 const vector = Vector.distance(A, B)  // Расстояние между двумя точками
 const vector = Vector.relation(A, B)  // Вектор отношения двух векторов (одинаковых размерностей)
 const normal = Vector.normal(A, B, C) // Единичный вектор нормали к плоскости, заданной тремя точками
+const random   = Vector.random(3) // вектор с случайными значениями
 
 /** Ортогональные векторы */
 const ortho = Vector.ortho2(vector) // {x, y} -> {-y, x}
@@ -97,17 +107,20 @@ const vector = vector.align(level = 1) // Приведение покомпон�
 
 /** Основные методы */
 const vector = vector.scale(factor)          // Умножение вектора на скаляр (масштабирование)
+const vector = vector.divide(factor)         // деление вектора на скаляр (для удобства)
 const vector = vector.addition(vector)       // Сложение векторов
 const vector = vector.difference(vector)     // Разность векторов
 const vector = vector.scalar(vector)         // Скалярное умножение векторов
 const vector = vector.multiplication(vector) // Покомпонентное умножение векторов
 
 /** Основные методы 2D */
-const vector = vector.rotate2d(angle) // Вращение вектора
+const vector = vector.rotate2D(angle)      // Вращение вектора
+const bool = vector.in2D(vectorA, vectorB) // попадение в ориентированный прямоугольник
 
 /** Основные методы 3D */
-const vector = vector.multiply(vector) // Векторное умножение (при размерности 3)
-const vector = vector.rotate3D()       // TODO: нет пока такого метода
+const vector = vector.multiply(vector)     // Векторное умножение (при размерности 3)
+const vector = vector.rotate3D()           // TODO: нет пока такого метода
+const bool = vector.in3D(vectorA, vectorB) // попадение в ориентированный параллепипед
 
 /** Основные методы (с приведением размерностей) */
 const vector = vector.add(vector)          // Сложение векторов (с приведением размерностей)

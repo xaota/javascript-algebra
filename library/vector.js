@@ -14,7 +14,7 @@
   */
   export default class Vector {
   /** {Vector} Вектор из массива координат @constructor
-    * @param {Float32Array} array данные координат вектора
+    * @param {Float32Array|Array} array данные координат вектора
     */
     constructor(array) {
       this.data = new Float32Array(array);
@@ -72,14 +72,14 @@
     set w(value) { this.data[3] = value }
 
   /** @subsection @method */
-  /** Копия вектора
+  /** Копия вектора / copy
     * @return {Vector} копия вектора
     */
     copy() {
       return new Vector(this.data);
     }
 
-  /** Объект с индексами вектора по осям
+  /** Объект с индексами вектора по осям / symbol
     * @return {Object} список индексов и значений
     */
     symbol() {
@@ -88,21 +88,21 @@
       return result;
     }
 
-  /** Проверка на нулевой вектор
+  /** Проверка на нулевой вектор / empty
     * @return {Boolean} true, если все компоненты вектора - нули
     */
     empty() {
       return this.data.every(e => e === 0);
     }
 
-  /** Проверка на единичный базисный вектор
+  /** Проверка на единичный базисный вектор / basis
     * @return {Boolean} true, если одна из компонент вектора единица, а остальные нули
     */
     basis() {
       return this.data.some(e => e === 1) && (this.data.filter(e => e === 0).length === this.dimension - 1);
     }
 
-  /** Номер оси базисного вектора
+  /** Номер оси базисного вектора / index
     * @return {integer} номер ненулевой размерности
     */
     index() {
@@ -111,7 +111,7 @@
         : -1;
     }
 
-  /** Проверка на единичный базисный вектор определенной оси
+  /** Проверка на единичный базисный вектор определенной оси / axis
     * @param {number} index номер проверяемой оси
     * @return {Boolean} true, если все компоненты вектора нули, кроме index
     */
@@ -119,21 +119,47 @@
       return this.data.indexOf(1) === index && this.basis();
     }
 
-  /** Норма вектора
+  /** Нахождение вектора в ориентированном прямоугольнике / in2D @2D
+    * @param {Vector} A левый нижний угол ориентированного прямоугольника
+    * @param {Vector} B правый верхний угол ориентированного прямоугольника
+    * @param {boolean} edges учитывать нахождение точки на границах
+    * @return {boolean} true, если вектор находится в заданной области
+    */
+    in2D(A = Vector.zero, B = Vector.infinity, edges = true) {
+      const [x, y] = [this.x, this.y];
+      return edges
+        ? A.x <= x && A.y <= y && B.x >= x && B.y >= y
+        : A.x < x && A.y < y && B.x > x && B.y > y;
+    }
+
+  /** Нахождение вектора в ориентированном параллепипеде / in3D @3D
+    * @param {Vector} A левый нижний угол ориентированного параллепипеда
+    * @param {Vector} B правый верхний угол ориентированного параллепипеда
+    * @param {boolean} edges учитывать нахождение точки на границах
+    * @return {boolean} true, если вектор находится в заданном объёме
+    */
+    in3D(A = Vector.zero, B = Vector.infinity, edges = true) {
+      const [x, y, z] = [this.x, this.y, this.z];
+      return edges
+        ? A.x <= x && A.y <= y && A.z <= z && B.x >= x && B.y >= y && B.z >= z
+        : A.x < x && A.y < y && A.z < z && B.x > x && B.y > y && B.z > z;
+    }
+
+  /** Норма вектора / norm
     * @return {number} значение нормы вектора
     */
     norm() {
       return this.data.reduce((r, e) => r + e ** 2, 0);
     }
 
-  /** Длина вектора
+  /** Длина вектора / length, magnitude
     * @return {number} значение длины вектора
     */
     length() {
       return Math.hypot(...this.data); // Math.sqrt(this.norm());
     }
 
-  /** Нормализация вектора
+  /** Нормализация вектора / normalize
     * @return {Vector} сонаправленный с исходным единичный вектор
     */
     normalize() {
@@ -143,28 +169,28 @@
         : this.scale(1 / length);
     }
 
-  /** Сопряжённый вектор
-    * @return {vector} (1 / vector)
+  /** Сопряжённый вектор (1/a) / link
+    * @return {Vector} (1 / vector)
     */
     link() {
       return new Vector(this.data.map(e => e === 0 ? 0 : 1 / e));
     }
 
-  /** Обратный вектор
+  /** Обратный вектор (-a) / reverse
     * @return {Vector} (-vector)
     */
     reverse() {
       return new Vector(this.data.map(e => -e));
     }
 
-  /** Вектор из компонент в обратном порядке
+  /** Вектор из компонент в обратном порядке / inverse
     * @return {Vector} (-vector)
     */
     inverse() {
       return new Vector(this.data.reverse());
     }
 
-  /** Половина исходного вектора
+  /** Половина исходного вектора / half
     * @return {Vector} вектор половинного размера
     */
     half() {
@@ -172,21 +198,21 @@
     }
 
   /** @subsection Аггрегирующие функции */
-  /** Максимальная компонента вектора
+  /** Максимальная компонента вектора / max
     * @return {number} Значение максимальной компоненты или 0
     */
     max() {
       return Math.max(...this.data, 0);
     }
 
-  /** Минимальная компонента вектора
+  /** Минимальная компонента вектора / min
     * @return {number} Значение минимальной компоненты или 0
     */
     min() {
       return Math.min(...this.data, 0);
     }
 
-  /** Среднее всех компонент вектора
+  /** Среднее всех компонент вектора / average
     * @return {number} значение среднего
     */
     average() {
@@ -194,7 +220,7 @@
       return this.data.reduce((r, e) => r + e, 0) / this.dimension;
     }
 
-  /** Приведение покомпонентного максимума (выравнивание вектора) к отношению от максимума
+  /** Приведение покомпонентного максимума (выравнивание вектора) к отношению от максимума / align
     * @param {percent} level процент от минимума до максиума среди компонент вектора
     * @return {Vector} выровненный вектор
     */
@@ -204,7 +230,7 @@
       return this.level(level);
     }
 
-  /** Приведение покомпонентного максимума (выравнивание вектора) к значению
+  /** Приведение покомпонентного максимума (выравнивание вектора) к значению / level
     * @param {number} level абсолютное значение
     * @return {Vector} выровнненный вектор
     */
@@ -213,7 +239,7 @@
     }
 
   /** @subsection Дополнительные функции */
-  /** Изменение размерности вектора @todo
+  /** Изменение размерности вектора @todo / resize
     * уменьшение - хвостовые значения отбрасываются
     * увеличение - координаты инициализируются нулями
     * @param {natural} dimension размерность вектора
@@ -225,7 +251,7 @@
       return new Vector(data);
     }
 
-  /** Изменение размерности вектора c дополнением единицами
+  /** Изменение размерности вектора c дополнением единицами / resizeIdentity
     * уменьшение - хвостовые значения отбрасываются
     * увеличение - координаты инициализируются единицами
     * @param {natural} dimension размерность вектора
@@ -235,7 +261,7 @@
       return Vector.identity(dimension).fill(0, ...this.data);
     }
 
-  /** Заполнение координат вектора новыми значениями
+  /** Заполнение координат вектора новыми значениями / fill
     * @param {natural} index позиция первого из заменяемых элементов в списке координат
     * @arguments {number} новые значения координат
     * @return {Vector} новый вектор с новыми значениями
@@ -247,7 +273,7 @@
     }
 
   /** @subsection Основные функции */
-  /** Умножение вектора на скаляр (масштабирование вектора)
+  /** Умножение вектора на скаляр (масштабирование вектора) / scale
     * @param {number} factor множитель (коэффициент масштабирования)
     * @return {Vector} новый вектор с новыми значениями координат
     */
@@ -255,7 +281,16 @@
       return new Vector(this.data.map(e => e * factor));
     }
 
-  /** Сложение векторов
+  /** Деление вектора на скаляр (для удобства) / divide
+    * @param {number} factor множитель (коэффициент масштабирования)
+    * @return {Vector} новый вектор с новыми значениями координат
+    */
+    divide(factor) {
+      if (factor === 0) return Vector.empty(this.dimension);
+      return new Vector(this.data.map(e => e / factor));
+    }
+
+  /** Сложение векторов / addition
     * @param {Vector} vector слагаемое
     * @return {Vector} вектор суммы
     */
@@ -263,7 +298,7 @@
       return new Vector(this.data.map((e, i) => e + vector.data[i]));
     }
 
-  /** Сложение векторов (с приведением размерностей)
+  /** Сложение векторов (с приведением размерностей) / add
     * @param {Vector} vector слагаемое
     * @return {Vector} вектор суммы
     */
@@ -272,7 +307,7 @@
       return this.resize(n).addition(vector.resize(n))
     }
 
-  /** Разность векторов
+  /** Разность векторов / difference, subtract
     * @param {Vector} vector вычитаемое
     * @return {Vector} вектор разности
     */
@@ -280,7 +315,7 @@
       return this.addition(vector.reverse());
     }
 
-  /** Разность векторов (с приведением размерностей)
+  /** Разность векторов (с приведением размерностей) / diff
     * @param {Vector} vector вычитаемое
     * @return {Vector} вектор разности
     */
@@ -288,7 +323,7 @@
       return this.add(vector.reverse());
     }
 
-  /** Скалярное умножение векторов
+  /** Скалярное умножение векторов / scalar
     * @param {Vector} vector множитель
     * @return {number} результат умножения
     */
@@ -296,7 +331,7 @@
       return this.data.reduce((result, e, i) => result + e * vector.data[i], 0);
     }
 
-  /** Скалярное умножение векторов (с приведением размерностей)
+  /** Скалярное умножение векторов (с приведением размерностей) / mult
     * @param {Vector} vector множитель
     * @return {number} результат умножения
     */
@@ -305,7 +340,7 @@
       return this.resize(n).scalar(vector.resize(n));
     }
 
-  /** Векторное умножение (при размерности 3)
+  /** Векторное умножение (при размерности 3) / multiply
     * @param {Vector} vector множитель
     * @return {Vector} результат умножения
     */
@@ -316,7 +351,7 @@
       return Vector.to(a, b);
     }
 
-  /** Покомпонентное умножение векторов
+  /** Покомпонентное умножение векторов / multiplication
     * @param {Vector} vector множитель
     * @return {Vector} результат умножения
     */
@@ -324,7 +359,7 @@
       return new Vector(this.data.map((e, i) => e * vector.data[i]));
     }
 
-  /** Покомпонентное умножение векторов (с приведением размерностей)
+  /** Покомпонентное умножение векторов (с приведением размерностей) / multiplicate
     * @param {Vector} vector множитель
     * @return {Vector} результат умножения
     */
@@ -333,17 +368,17 @@
       return this.resize(n).multiplication(vector.resize(n));
     }
 
-  /** Вращение вектора @2d
+  /** Вращение вектора @2d / rotate2D
     * @param {number} angle угол поворота @radians
     * @return {Vector} вектор после поворота
     */
-    rotate2d(angle) {
+    rotate2D(angle) {
       const x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
       const y = this.x * Math.sin(angle) + this.y * Math.cos(angle);
       return Vector.from(x, y);
     }
 
-  /** Вращение вектора @3d @TODO: создать метод
+  /** Вращение вектора @3d @TODO: создать метод / rotate3D
     * @param {number} angle угол поворота @radians
     * @return {Vector} @this
     */
@@ -353,12 +388,12 @@
     }
 
   /** @subsection @export */
-  /** Массив компонент вектора
-    * @param {boolean} float32array необходимость вернуть типимизованный массив
-    * @return {Array} массив координат вектора
+  /** Массив компонент вектора / export
+    * @param {boolean} typed необходимость вернуть типимизованный массив
+    * @return {Float32Array|Array} массив координат вектора
     */
-    export(float32array = false) {
-      return float32array
+    export(typed = false) {
+      return typed !== false
         ? this.data.slice()
         : Array.from(this.data);
     }
@@ -376,20 +411,20 @@
     * @param {natural} dimension размерность вектора
     * @return {Vector} нулевой вектор
     */
-    static empty(dimension) {
+    static empty(dimension = 2) {
       return new Vector(new Float32Array(dimension)); // auto.fill(0)
     }
 
-  /** Вектор любой размерности, все элементы которого одинаковые
+  /** Вектор любой размерности, все элементы которого одинаковые / identity @static
     * @param {natural} dimension размерность вектора
     * @param {number} value значение элементов вектора
     * @return {Vector} вектор с единиичными компонентами
     */
-    static identity(dimension, value = 1) {
+    static identity(dimension = 2, value = 1) {
       return new Vector((new Float32Array(dimension)).fill(value));
     }
 
-  /** Единичный (базисный) вектор любой размерности
+  /** Единичный (базисный) вектор любой размерности / basis @static
     * @param {natural} dimension размерность вектора
     * @param {natural} index     номер единичной координаты
     * @return {Vector} кроме index все координаты будут нулевыми
@@ -398,7 +433,7 @@
       return Vector.empty(dimension).fill(index, 1);
     }
 
-  /** Вектор из точки A в точку B
+  /** Вектор из точки A в точку B / to @static
     * @param {Vector} A координаты точки A
     * @param {Vector} B координаты точки B
     * @return {Vector} вектор разности B - A
@@ -407,7 +442,7 @@
       return B.difference(A);
     }
 
-  /** Расстояние между двумя точками
+  /** Расстояние между двумя точками / distance @static
     * @param {Vector} A координаты точки A
     * @param {Vector} B координаты точки B
     * @return {number} длина вектора между точками
@@ -416,7 +451,7 @@
       return Vector.to(A, B).length();
     }
 
-  /** Сравнение двух векторов
+  /** Сравнение двух векторов / compare @static
     * @param {Vector} A сравниваемые векторы
     * @param {Vector} B сравниваемые векторы
     * @param {number} precision точность
@@ -426,7 +461,7 @@
       return A.data.every((e, i) => Math.abs(e - B.data[i]) < precision);
     }
 
-  /** Вектор отношения двух векторов (одинаковых размерностей)
+  /** Вектор отношения двух векторов (одинаковых размерностей) / relation @static
     * @param {Vector} A первый вектор
     * @param {Vector} B второй вектор
     * @return {Vector} вектор покомпонентного отношения
@@ -435,25 +470,34 @@
       return new Vector(B.data.map((e, i) => e / A.data[i]));
     }
 
+  /** Вектор случайных значений / random @static
+    * @param {natural} dimension размерность итогового вектора
+    * @return {Vector} истоговый вектор с значениями [0, 1)
+    */
+    static random(dimension = 2) {
+      const array = Array.from({length: dimension}, _ => Math.random());
+      return new Vector(array);
+    }
+
   /** @subsection Ортогональные векторы */
-  /** Ортогональный вектор @2d для линии на плоскости
+  /** Ортогональный вектор @2d для линии на плоскости / ortho2D, normal2D
     * @param {Vector} vector оригинальный вектор
     * @return {Vector} ортогональ
     */
-    static ortho2(vector) {
+    static ortho2D(vector) {
       return Vector.from(-vector.y, vector.x);
     }
 
-  /** Ортогональный вектор @3d для плоскости в пространстве
+  /** Ортогональный вектор @3d для плоскости в пространстве / ortho3D
     * @param {Vector} A первый вектор задания плоскости
     * @param {Vector} B второй вектор задания плоскости
     * @return {Vector} ортогональ
     */
-    static ortho3(A, B) {
+    static ortho3D(A, B) {
       return A.multiply(B);
     }
 
-  /** Единичный вектор нормали к плоскости, заданной тремя точками (a, b, c)
+  /** Единичный вектор нормали к плоскости, заданной тремя точками (a, b, c) / normal @static
     * @param {Vector} a координаты точки a
     * @param {Vector} b координаты точки b
     * @param {Vector} c координаты точки c
@@ -465,7 +509,7 @@
       return A.multiply(B).normalize().reverse();
     }
 
-  /** Сумма нескольких векторов
+  /** Сумма нескольких векторов / addition @static
     * @param {natural} dimension размерность складываемых векторов
     * @param {...Vector} слагаемые векторы размерности dimension
     * @return {Vector} вектор суммы
@@ -479,7 +523,7 @@
       return tail.reduce((result, vector) => result.addition(vector), head);
     }
 
-  /** Приведение размерности векторов (выбор максимальной)
+  /** Приведение размерности векторов (выбор максимальной) / dimension @static
     * @param {...Vector} vectors список векторов
     * @return {number} максимальная размерность
     */
@@ -490,23 +534,25 @@
 
   /** @subsection @const Частые значения */
   /** 2D */
-    Vector.x     = Vector.basis(2, 0);
-    Vector.y     = Vector.basis(2, 1);
-    Vector.zero  = Vector.empty(2);
-    Vector.flipX = Vector.from(-1,  1);
-    Vector.flipY = Vector.from( 1, -1);
-    Vector.one   = Vector.identity(2);
-    Vector.half  = Vector.from(0.5, 0.5);
+    Vector.x        = Vector.basis(2, 0);
+    Vector.y        = Vector.basis(2, 1);
+    Vector.zero     = Vector.empty(2);
+    Vector.flipX    = Vector.from(-1,  1);
+    Vector.flipY    = Vector.from( 1, -1);
+    Vector.one      = Vector.identity(2);
+    Vector.half     = Vector.from(0.5, 0.5);
+    Vector.infinity = Vector.from(Infinity, Infinity);
   /** 3D */
-    Vector.X     = Vector.basis(3, 0);
-    Vector.Y     = Vector.basis(3, 1);
-    Vector.Z     = Vector.basis(3, 2);
-    Vector.ZERO  = Vector.empty(3);
-    Vector.FlipX = Vector.from(-1,  1,  1);
-    Vector.FlipY = Vector.from( 1, -1,  1);
-    Vector.FlipZ = Vector.from( 1,  1, -1);
-    Vector.ONE   = Vector.identity(3);
-    Vector.HALF  = Vector.from(0.5, 0.5, 0.5);
+    Vector.X        = Vector.basis(3, 0);
+    Vector.Y        = Vector.basis(3, 1);
+    Vector.Z        = Vector.basis(3, 2);
+    Vector.ZERO     = Vector.empty(3);
+    Vector.FlipX    = Vector.from(-1,  1,  1);
+    Vector.FlipY    = Vector.from( 1, -1,  1);
+    Vector.FlipZ    = Vector.from( 1,  1, -1);
+    Vector.ONE      = Vector.identity(3);
+    Vector.HALF     = Vector.from(0.5, 0.5, 0.5);
+    Vector.INFINITY = Vector.from(Infinity, Infinity, Infinity);
 
 /** @section @private */
   const vectorIndex = 'xyzw';

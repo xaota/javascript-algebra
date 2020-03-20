@@ -1,3 +1,3 @@
-export {default as Vector}  from './library/vector.js';
-export {default as Quatern} from './library/quatern.js';
-export {default as Matrix}  from './library/matrix.js';
+export {default as Vector}  from './library/Vector.js';
+export {default as Quatern} from './library/Quatern.js';
+export {default as Matrix}  from './library/Matrix.js';

@@ -56,11 +56,11 @@
       return '\n' + s.join('\n');
     }
 
-  /** Копирование матрицы
+  /** Копирование матрицы / copy
     * @return {Matrix} новая матрица
     */
     copy() {
-      return new Matrix(this.data, this.height, this.width);
+      return new Matrix(this.data.slice(), this.height, this.width);
     }
 
   /** Вектор из элементов матрицы
