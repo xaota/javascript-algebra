@@ -163,10 +163,8 @@
     * @return {Vector} сонаправленный с исходным единичный вектор
     */
     normalize() {
-      const length = this.length();
-      return length === 0
-        ? Vector.empty(this.dimension)
-        : this.scale(1 / length);
+      const factor = this.length();
+      return this.divide(factor);
     }
 
   /** Сопряжённый вектор (1/a) / link
