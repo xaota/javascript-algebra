@@ -159,11 +159,11 @@
     }
 
   /** @subsection Основные методы */
-  /** Умножение матрицы на скаляр
+  /** Умножение матрицы на скаляр / dot (scalar)
     * @param {number} factor коэффициент изменения элементов матрицы
     * @return {Matrix} новая матрица с измененными компонентами
     */
-    scalar(factor) {
+    dot(factor) {
       return new Matrix(this.data.map(e => e * factor), this.height, this.width);
     }
 
@@ -201,7 +201,7 @@
       return this.resize(h, w).addition(matrix.resize(h, w));
     }
 
-  /** Умножение согласованных матриц
+  /** Умножение согласованных матриц / multiply
     * @param {Matrix} matrix матрица-множитель (справа)
     * @return {Matrix} результирующая матрица
     */
@@ -210,7 +210,7 @@
             A = this.rows(), B = matrix.cols();
       for (let i = 0; i < w; ++i) {
         for (let j = 0; j < h; ++j) {
-          array[i * h + j] = A[j].scalar(B[i]);
+          array[i * h + j] = A[j].dot(B[i]);
         }
       }
       return new Matrix(array, h, w);

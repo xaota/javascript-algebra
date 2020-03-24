@@ -104,11 +104,11 @@
       return new Quatern(A.x + B.x, A.y + B.y, A.z + B.z, A.w + B.w);
     }
 
-  /** Скалярное умножение кватернионов
+  /** Скалярное умножение кватернионов / dot (scalar)
     * @param {Quatern} quatern множитель
     * @return {Quatern} кватернион
     */
-    scalar(quatern) {
+    dot(quatern) {
       const A = this, B = quatern;
       return new Quatern(A.x * B.x, A.y * B.y, A.z * B.z, A.w * B.w);
     }

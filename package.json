@@ -1,6 +1,6 @@
 {
   "name": "javascript-algebra",
-  "version": "1.5.7",
+  "version": "1.6.7",
   "description": "Алгебраические методы для матриц, векторов и кватернионов",
   "main": "index.js",
   "type": "module",
@@ -21,7 +21,8 @@
     "graphics",
     "vector",
     "quaternion",
-    "matrix"
+    "matrix",
+    "math"
   ],
   "author": "https://github.com/xaota",
   "license": "Unlicense",

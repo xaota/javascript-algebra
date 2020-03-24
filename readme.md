@@ -125,7 +125,7 @@ const vector = vector.scale(factor)          // Умножение вектор�
 const vector = vector.divide(factor)         // деление вектора на скаляр (для удобства)
 const vector = vector.addition(vector)       // Сложение векторов
 const vector = vector.difference(vector)     // Разность векторов
-const vector = vector.scalar(vector)         // Скалярное умножение векторов
+const vector = vector.dot(vector)            // Скалярное умножение векторов (scalar)
 const vector = vector.multiplication(vector) // Покомпонентное умножение векторов
 
 /** Основные методы 2D */
@@ -182,7 +182,7 @@ const quaternion = quatern.reverse()     // Сопряжённый кватер�
 const quaternion = quatern.inverse()     // Обратный (по умножению) (.reverse().scale(1 / norm))
 const quaternion = quatern.scale(factor) // Умножение на скаляр
 const quaternion = quatern.addition(Q)   // Сложение кватернионов
-const quaternion = quatern.scalar(Q)     // Скалярное умножение
+const quaternion = quatern.dot(Q)        // Скалярное умножение (scalar)
 const quaternion = quatern.multiply(Q)   // Умножение кватернионов
 
 /** Дополнительные методы (const quatern = new Quatern(...)) */
@@ -252,7 +252,7 @@ const identity = matrix.identity() // true, если все элементы г�
 
 /** Основные методы (const matrix = new Matrix(...)) */
 const matx = matrix.transpose()       // Транспонирование матрицы
-const matx = matrix.scalar(factor)    // Умножение матрицы на скаляр
+const matx = matrix.dot(factor)       // Умножение матрицы на скаляр (scalar)
 const matx = matrix.addition(M)       // Сложение матриц
 const matx = matrix.multiply(M)       // Умножение согласованных матриц
 const matx = matrix.translate(vector) // Операция переноса координат

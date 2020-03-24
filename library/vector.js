@@ -321,11 +321,11 @@
       return this.add(vector.reverse());
     }
 
-  /** Скалярное умножение векторов / scalar
+  /** Скалярное умножение векторов / dot (scalar)
     * @param {Vector} vector множитель
     * @return {number} результат умножения
     */
-    scalar(vector) {
+    dot(vector) {
       return this.data.reduce((result, e, i) => result + e * vector.data[i], 0);
     }
 
@@ -335,7 +335,7 @@
     */
     mult(vector) {
       const n = Vector.dimension(this, vector);
-      return this.resize(n).scalar(vector.resize(n));
+      return this.resize(n).dot(vector.resize(n));
     }
 
   /** Векторное умножение (при размерности 3) / multiply
