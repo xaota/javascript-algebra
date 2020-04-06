@@ -359,5 +359,5 @@ const vec = Matrix.transitionInverse3D(matrix, vector) //
 ```
 
 ## ROADMAP
-- `Quatern` - повороты, интерполяция
+- `Quatern` - повороты, интерполяция (LERP)
 - `Matrix`  - мутабельные методы работы с элементами @faster, жорданки, расчет теней для 3d
