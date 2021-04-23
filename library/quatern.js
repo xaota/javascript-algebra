@@ -1,9 +1,8 @@
 /** @description Алгебра: Кватернионы полезно для @2d и @3d [es6]
   * @author github.com/xaota
-  * @types
-  * * {integer} <-> {number} - целые числа
-  * * {natural} <-> {number} - натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
-  * * {percent} <-> {number} - число в промежутке [0, 1]
+  * @typedef {number} Integer целые числа
+  * @typedef {number} Natural натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
+  * @typedef {number} Percent число в промежутке [0, 1]
 
   * @todo Ещё гора чего не описана. +этим тегом помечаю кандидаты на оптимизацию, переписывание и т. д.
   * @feature Цепочные вызовы, типа `Vector.from(1,2,3).scale(2).reverse().normalize()`
@@ -20,7 +19,7 @@
     * @param {number} w элемент кватерниона
     */
     constructor(x, y, z, w) {
-      Object.assign(this, {x, y, z, w});
+      Object.assign(this, { x, y, z, w });
     }
 
   /** @subsection @method */
@@ -100,7 +99,7 @@
     * @return {Quatern} кватернион
     */
     addition(quatern) {
-      const A = this, B = quatern;
+      const A = this; const B = quatern;
       return new Quatern(A.x + B.x, A.y + B.y, A.z + B.z, A.w + B.w);
     }
 
@@ -109,7 +108,7 @@
     * @return {Quatern} кватернион
     */
     dot(quatern) {
-      const A = this, B = quatern;
+      const A = this; const B = quatern;
       return new Quatern(A.x * B.x, A.y * B.y, A.z * B.z, A.w * B.w);
     }
 
@@ -118,11 +117,11 @@
     * @return {Quatern} кватернион
     */
     multiply(quatern) {
-      const A = this, B = quatern,
-        x = A.w * B.x + A.x * B.w + A.y * B.z - A.z * B.y,
-        y = A.w * B.y - A.x * B.z + A.y * B.w + A.z * B.x,
-        z = A.w * B.z + A.x * B.y - A.y * B.x + A.z * B.w,
-        w = A.w * B.w - A.x * B.x - A.y * B.y - A.z * B.z;
+      const A = this; const B = quatern;
+        const x = A.w * B.x + A.x * B.w + A.y * B.z - A.z * B.y;
+        const y = A.w * B.y - A.x * B.z + A.y * B.w + A.z * B.x;
+        const z = A.w * B.z + A.x * B.y - A.y * B.x + A.z * B.w;
+        const w = A.w * B.w - A.x * B.x - A.y * B.y - A.z * B.z;
       return new Quatern(x, y, z, w);
     }
 
@@ -134,11 +133,11 @@
     */
     static from(angle, vector) {
       angle /= 2;
-      const cos = Math.cos(angle), sin = Math.sin(angle),
-        w = cos,
-        x = vector.x * sin,
-        y = vector.y * sin,
-        z = vector.z * sin;
+      const cos = Math.cos(angle); const sin = Math.sin(angle);
+        const w = cos;
+        const x = vector.x * sin;
+        const y = vector.y * sin;
+        const z = vector.z * sin;
       return new Quatern(x, y, z, w);
     }
 

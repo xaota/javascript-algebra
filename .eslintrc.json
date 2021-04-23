@@ -1,0 +1,49 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "standard"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": "off",
+    "semi-spacing": "error",
+    "semi-style": [
+      "error",
+      "last"
+    ],
+    "indent": "off",
+    "indent-legacy": "off",
+    "space-before-function-paren": "off",
+    "node/no-callback-literal": "off",
+    "no-multi-spaces": "off",
+    "no-dupe-class-members":"warn",
+    "no-return-assign": "warn",
+    "key-spacing":"off",
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": true
+        }
+      }
+    ],
+    "valid-jsdoc": [
+      "warn",
+      {
+        "requireReturn": false
+      }
+    ]
+  }
+}

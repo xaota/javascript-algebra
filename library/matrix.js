@@ -1,9 +1,9 @@
 /** @description Алгебра: Матрицы, полезно для @2d и @3d [es6]
   * @author github.com/xaota
   * @types
-  * * {integer} <-> {number} - целые числа
-  * * {natural} <-> {number} - натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
-  * * {percent} <-> {number} - число в промежутке [0, 1]
+  * @typedef {number} Integer целые числа
+  * @typedef {number} Natural натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
+  * @typedef {number} Percent число в промежутке [0, 1]
   * * {Object#MatrixData} - Объект, возвращаемый методом Гаусса
         width         {number} число столбцов расширенной матрицы, с которыми производилась работа
         matrix        {Matrix} итоговая расширенная матрица
@@ -20,15 +20,15 @@
   import Quatern from './quatern.js';
 
 /** @section {Matrix} Работа с матрицами @export @class
-  * @field height {natural} количество строк    (высота)
-  * @field width  {natural} количество столбцов (ширина)
+  * @field height {Natural} количество строк    (высота)
+  * @field width  {Natural} количество столбцов (ширина)
   * @field data {Float32Array} элементы матрицы (по столбцам)
   */
   export default class Matrix {
   /** Матрица из элементов массива параметра
     * @param {Float32Array} array данные элементов матрицы (по столбцам)
-    * @param {natural} height количество строк    (высота)
-    * @param {natural} width  количество столбцов (ширина)
+    * @param {Natural} height количество строк    (высота)
+    * @param {Natural} width  количество столбцов (ширина)
     */
     constructor(array, height, width) {
       this.height = height;
@@ -38,13 +38,13 @@
 
   /** @subsection @method */
   /** Вывод матрицы в терминал @debug
-    * @param {natural} precision количество знаков после запятой в значениях элементов матрицы
+    * @param {Natural} precision количество знаков после запятой в значениях элементов матрицы
     * @return {string} @multiline
     */
     toString(precision = 2) {
-      const w = this.width, h = this.height, s = [],
-          d = Array.from(this.data, e => e.toFixed(precision)),
-          l = Math.max(...d.map(e => e.length)) + 1;
+      const w = this.width; const h = this.height; const s = [];
+          const d = Array.from(this.data, e => e.toFixed(precision));
+          const l = Math.max(...d.map(e => e.length)) + 1;
       for (let i = 0; i < h; ++i) {
         const temp = [];
         for (let j = 0; j < w; ++j) {
@@ -74,7 +74,7 @@
     * @return {Matrix} транспонированная матрица
     */
     transpose() {
-      const h = this.height, w = this.width, array = new Float32Array(w * h);
+      const h = this.height; const w = this.width; const array = new Float32Array(w * h);
       for (let i = 0; i < w; ++i) {
         for (let j = 0; j < h; ++j) {
           array[j * w + i] = this.data[i * h + j];
@@ -87,7 +87,7 @@
     * @return {number} значение следа
     */
     trace() {
-      const h = this.height, w = this.width, n = Math.min(h, w);
+      const h = this.height; const w = this.width; const n = Math.min(h, w);
       let r = 0;
       for (let i = 0; i < n; ++i) r += this.data[i * h + i];
       return r;
@@ -97,7 +97,7 @@
     * @return {Boolean} true, если все элементы главной диагонали - единицы, а остальные элементы матрицы - нули
     */
     identity() {
-      const h = this.height, w = this.width, l = h * w, n = Math.min(h, w);
+      const h = this.height; const w = this.width; const l = h * w; const n = Math.min(h, w);
       return (this.data.filter(e => e === 0).length === l - n) && (this.data.filter(e => e === 1).length === n);
     }
 
@@ -123,16 +123,16 @@
     }
 
   /** Вектор-столбец матрицы
-    * @param {natural} index номер столбца, вектор из элементов которого необходимо получить
+    * @param {Natural} index номер столбца, вектор из элементов которого необходимо получить
     * @return {Vector} столбец матрицы
     */
     col(index) {
-      const h = this.height, start = index * h, end = start + h;
+      const h = this.height; const start = index * h; const end = start + h;
       return new Vector(this.data.slice(start, end));
     }
 
   /** Вектор-строка матрицы
-    * @param {natural} index номер строки, вектор из элементов которой необходимо получить
+    * @param {Natural} index номер строки, вектор из элементов которой необходимо получить
     * @return {Vector} строка матрицы
     */
     row(index) {
@@ -143,7 +143,7 @@
     * @return {Vector} вектор главной диагонали матрицы
     */
     diagonal() {
-      const h = this.height, n = Math.min(h, this.width);
+      const h = this.height; const n = Math.min(h, this.width);
       const array = new Float32Array(n).map((e, i) => this.data[h * i + i]);
       return new Vector(array);
     }
@@ -153,7 +153,7 @@
     * @return {Matrix} новая матрица с измененными компонентами главной диагонали
     */
     DIAGONAL(vector) {
-      const h = this.height, w = this.width, n = Math.min(h, w), array = this.data.slice();
+      const h = this.height; const w = this.width; const n = Math.min(h, w); const array = this.data.slice();
       for (let i = 0; i < n; ++i) array[h * i + i] = vector.data[i];
       return new Matrix(array, h, w);
     }
@@ -170,12 +170,12 @@
   /** Изменение размеров матрицы
     * уменьшение - элементы за пределами таблицы отбрасываются
     * увеличение - новые элементы инициализируются нулями
-    * @param {natural} height количество строк    (высота) матрицы
-    * @param {natural} width  количество столбцов (ширина) матрицы
+    * @param {Natural} height количество строк    (высота) матрицы
+    * @param {Natural} width  количество столбцов (ширина) матрицы
     * @return {Matrix} новая матрица
     */
     resize(height, width) {
-      const h = Math.min(this.height, height), w = Math.min(this.width, width), array = new Float32Array(height * width);
+      const h = Math.min(this.height, height); const w = Math.min(this.width, width); const array = new Float32Array(height * width);
       for (let i = 0; i < w; ++i) {
         for (let j = 0; j < h; ++j) {
           array[i * height + j] = this.data[i * this.height + j];
@@ -197,7 +197,7 @@
     * @return {Matrix} результирующая матрица
     */
     add(matrix) {
-      const h = Math.max(this.height, matrix.height), w = Math.max(this.width, matrix.width);
+      const h = Math.max(this.height, matrix.height); const w = Math.max(this.width, matrix.width);
       return this.resize(h, w).addition(matrix.resize(h, w));
     }
 
@@ -206,8 +206,8 @@
     * @return {Matrix} результирующая матрица
     */
     multiply(matrix) {
-      const h = this.height, w = matrix.width, array = new Float32Array(h * w),
-            A = this.rows(), B = matrix.cols();
+      const h = this.height; const w = matrix.width; const array = new Float32Array(h * w);
+            const A = this.rows(); const B = matrix.cols();
       for (let i = 0; i < w; ++i) {
         for (let j = 0; j < h; ++j) {
           array[i * h + j] = A[j].dot(B[i]);
@@ -242,8 +242,8 @@
     }
 
   /** Возврат элементов матрицы с любого места (значения хранятся по столбцам)
-    * @param {natural} start стартовое значение
-    * @param {natural} count количество возвращаемых элементов
+    * @param {Natural} start стартовое значение
+    * @param {Natural} count количество возвращаемых элементов
     * @return {Float32Array} частичный вектор значений элементов матрицы
     */
     element(start, count) {
@@ -251,7 +251,7 @@
     }
 
   /** Заполнение элементов матрицы новыми данными с любого места (значения хранятся по столбцам)
-    * @param {natural} index стартовое значение
+    * @param {Natural} index стартовое значение
     * @param {Float32Array} data новые значения элементов матрицы
     * @return {Matrix} новая матрица с измененными значениями элементов
     */
@@ -262,8 +262,8 @@
     }
 
   /** Получение конкретного элемента матрицы по строке и столбцу
-    * @param {natural} row номер строки
-    * @param {natural} col номер столбца
+    * @param {Natural} row номер строки
+    * @param {Natural} col номер столбца
     * @return {number} значение элемента матрицы
     */
     get(row, col) {
@@ -271,19 +271,19 @@
     }
 
   /** Установка конкретного элемента матрицы по строке и столбцу
-    * @param {natural} row номер строки
-    * @param {natural} col номер столбца
+    * @param {Natural} row номер строки
+    * @param {Natural} col номер столбца
     * @param {number} value устанавливаемое значение
     * @return {Matrix} новая матрица с одним измененным значением
     */
     set(row, col, value) {
-      const array = this.data.slice(), h = this.height, w = this.width;
+      const array = this.data.slice(); const h = this.height; const w = this.width;
       array[h * col + row] = value;
       return new Matrix(array, h, w);
     }
 
   /** Замена столбца в матрице на значения из вектора
-    * @param {natural} index номер столбца
+    * @param {Natural} index номер столбца
     * @param  {Vector} vector вектор, который станет столбцом
     * @return {Matrix} новая матрица с измененным столбцом
     */
@@ -292,7 +292,7 @@
     }
 
   /** Замена строки в матрице на значения из вектора
-    * @param {natural} index номер строки
+    * @param {Natural} index номер строки
     * @param  {Vector} vector вектор, который станет строкой
     * @return {Matrix} новая матрица с измененной строкой
     */
@@ -301,7 +301,7 @@
     }
 
   /** Добавление к столбцу матрицы значение из вектора
-    * @param {natural} index номер столбца матрицы
+    * @param {Natural} index номер столбца матрицы
     * @param  {Vector} vector прибавляемый вектор
     * @return {Matrix} новая матрица с измененным столбцом
     */
@@ -310,7 +310,7 @@
     }
 
   /** Добавление к строке матрицы значение из вектора
-    * @param {natural} index номер строки матрицы
+    * @param {Natural} index номер строки матрицы
     * @param  {Vector} vector прибавляемый вектор
     * @return {Matrix} новая матрица с измененной строкой
     */
@@ -498,7 +498,7 @@
     * @return {Matrix} матрица после сдвига
     */
     shiftUpLeft() {
-      const n = this.width, shift = Matrix.shiftUp(n), unshift = Matrix.shiftDown(n);
+      const n = this.width; const shift = Matrix.shiftUp(n); const unshift = Matrix.shiftDown(n);
       return shift.multiply(this).multiply(unshift);
     }
 
@@ -514,7 +514,7 @@
     * @return {Matrix} матрица после сдвига
     */
     shiftDownRight() {
-      const n = this.width, shift = Matrix.shiftUp(n), unshift = Matrix.shiftDown(n);
+      const n = this.width; const shift = Matrix.shiftUp(n); const unshift = Matrix.shiftDown(n);
       return unshift.multiply(this).multiply(shift);
     }
 
@@ -531,9 +531,9 @@
     * @return {Matrix} обратная матрица
     */
     inverse() {
-      const h = this.height, w = this.width,
-            m = Matrix.concat(this, Matrix.identity(h)),
-       matrix = Matrix.gauss(m, w).matrix.data.slice(h * w);
+      const h = this.height; const w = this.width;
+            const m = Matrix.concat(this, Matrix.identity(h));
+       const matrix = Matrix.gauss(m, w).matrix.data.slice(h * w);
       return new Matrix(matrix, h, w);
     }
 
@@ -560,12 +560,12 @@
     }
 
   /** Минор матрицы по строке и столбцу (получаемый минор должен существовать)
-    * @param {natural} row номер исключаемой строки
-    * @param {natural} col номер исключаемого столбца
+    * @param {Natural} row номер исключаемой строки
+    * @param {Natural} col номер исключаемого столбца
     * @return {Matrix} минор
     */
     minor(row, col) {
-      const h = this.height, w = this.width, m = h - 1, n = w - 1, array = new Float32Array(m * n);
+      const h = this.height; const w = this.width; const m = h - 1; const n = w - 1; const array = new Float32Array(m * n);
       for (let i = 0; i < w; ++i) {
         if (col === i) continue;
         for (let j = 0; j < h; ++j) {
@@ -582,9 +582,9 @@
     * @return {Matrix} минор
     */
     minors(rows, cols) {
-      const h = this.height, w = this.width;
-      const m = h - rows.length, n = w - cols.length, array = new Float32Array(m * n);
-      let i = 0, y = 0, j, x;
+      const h = this.height; const w = this.width;
+      const m = h - rows.length; const n = w - cols.length; const array = new Float32Array(m * n);
+      let i = 0; let y = 0; let j; let x;
       for (; i < w; ++i) {
         if (cols.indexOf(i) > -1) ++y; else {
           for (j = 0, x = 0; j < h; ++j) {
@@ -603,7 +603,7 @@
     * @return {Matrix} минор матрицы
     */
     minore(from = Vector.zero, to = Vector.from(this.height, this.width)) {
-      const h = this.height, w = this.width;
+      const h = this.height; const w = this.width;
       const items = (count, point = 0) => Array.from(new Array(count), (_, i) => point + i);
       const rows = items(from.x).concat(items(h - to.x, to.x));
       const cols = items(from.y).concat(items(w - to.y, to.y));
@@ -615,24 +615,24 @@
     * @return {Vector} решение СЛАУ
     */
     solve(vector) {
-      const w = this.width, n = this.height * w;
+      const w = this.width; const n = this.height * w;
       return new Vector(Matrix.gauss(Matrix.concat(this, Matrix.from(vector)), w).matrix.data.slice(n));
     }
 
   /** @subsection Элементарные преобразования матрицы */
   /** Обмен столбцов матрицы
-    * @param {natural} a номер первого перемещаемого столбца
-    * @param {natural} b номер второго перемещаемого столбца
+    * @param {Natural} a номер первого перемещаемого столбца
+    * @param {Natural} b номер второго перемещаемого столбца
     * @return {Matrix} новая матрица с изменением мест двух столбцов
     */
     swapCol(a, b) {
-      const A = this.col(a), B = this.col(b);
+      const A = this.col(a); const B = this.col(b);
       return this.setCol(a, B).setCol(b, A);
     }
 
   /** Смена местами строк матрицы
-    * @param {natural} a номер первой перемещаемой строки
-    * @param {natural} b номер второй перемещаемой строки
+    * @param {Natural} a номер первой перемещаемой строки
+    * @param {Natural} b номер второй перемещаемой строки
     * @return {Matrix} новая матрица с изменением мест двух строк
     */
     swapRow(a, b) {
@@ -640,7 +640,7 @@
     }
 
   /** Умножение столбца матрицы на скаляр
-    * @param {natural} index номер столбца
+    * @param {Natural} index номер столбца
     * @param {number} factor множитель
     * @return {Matrix} матрица после преобразования
     */
@@ -649,7 +649,7 @@
     }
 
   /** Умножение строки матрицы на скаляр
-    * @param {natural} index номер строки
+    * @param {Natural} index номер строки
     * @param {number} factor множитель
     * @return {Matrix} матрица после преобразования
     */
@@ -658,8 +658,8 @@
     }
 
   /** Добавление к столбцу матрицы другого столбца, помноженного на скаляр
-    * @param {natural} a номер столбца, к которому будет прибавление
-    * @param {natural} b номер прибавляемого столбца
+    * @param {Natural} a номер столбца, к которому будет прибавление
+    * @param {Natural} b номер прибавляемого столбца
     * @param {number} factor множитель прибавляемого столбца @required
     * @return {Matrix} матрица после преобразования
     */
@@ -668,8 +668,8 @@
     }
 
   /** Добавление к строке матрицы другой строки, помноженной на скаляр
-    * @param {natural} a номер строки, к которой будет прибавление
-    * @param {natural} b номер прибавляемой строки
+    * @param {Natural} a номер строки, к которой будет прибавление
+    * @param {Natural} b номер прибавляемой строки
     * @param {number} factor множитель прибавляемой строки @required
     * @return {Matrix} матрица после преобразования
     */
@@ -717,7 +717,7 @@
     * @return {Matrix} матрица
     */
     static from(...vector) {
-      const w = vector.length, h = vector[0].dimension;
+      const w = vector.length; const h = vector[0].dimension;
       let matrix = Matrix.empty(h, w);
       vector.forEach((v, i) => matrix = matrix.fill(i * h, v.data)); // setCol(i, v)
       return matrix;
@@ -728,8 +728,8 @@
     * @return {Matrix} матрица-блок
     */
     static concat(...matrix) {
-      const h = matrix[0].height, w = matrix.reduce((r, e) => r + e.width, 0), array = new Float32Array(h * w);
-      let i = 0, shift = 0;
+      const h = matrix[0].height; const w = matrix.reduce((r, e) => r + e.width, 0); const array = new Float32Array(h * w);
+      let i = 0; let shift = 0;
       for (; i < matrix.length; ++i) {
         matrix[i].data.forEach((e, i) => array[shift + i] = e);
         shift += matrix[i].width * h;
@@ -738,7 +738,7 @@
     }
 
   /** Единичная матрица любой размерности
-    * @param {natural} dimension размерность
+    * @param {Natural} dimension размерность
     * @return {Matrix} единиичная матрица
     */
     static identity(dimension) {
@@ -748,8 +748,8 @@
     }
 
   /** Нулевая (пустая) матрица
-    * @param {natural} height количество строк    (высота)
-    * @param {natural} width  количество столбцов (ширина)
+    * @param {Natural} height количество строк    (высота)
+    * @param {Natural} width  количество столбцов (ширина)
     * @return {Matrix} нулевая матрица
     */
     static empty(height, width = height) {
@@ -786,7 +786,7 @@
     * @return {Matrix} матрица с нулями и данным вектором главной диагонали
     */
     static diagonal(vector) {
-      const n = vector.dimension, array = new Float32Array(n * n);
+      const n = vector.dimension; const array = new Float32Array(n * n);
       vector.data.forEach((e, i) => array[i * n + i] = e);
       return new Matrix(array, n, n);
     }
@@ -796,7 +796,7 @@
     * @return {Matrix} матрица с нулями и данным вектором главной над-диагонали
     */
     static diagonalUp(vector) {
-      const n = vector.dimension + 1, array = new Float32Array(n * n);
+      const n = vector.dimension + 1; const array = new Float32Array(n * n);
       vector.data.forEach((e, i) => array[(i + 1) * n + i] = e);
       return new Matrix(array, n, n);
     }
@@ -806,13 +806,13 @@
     * @return {Matrix} матрица с нулями и данным вектором главной под-диагонали
     */
     static diagonalDown(vector) {
-      const n = vector.dimension + 1, array = new Float32Array(n * n);
+      const n = vector.dimension + 1; const array = new Float32Array(n * n);
       vector.data.forEach((e, i) => array[i * n + (i + 1)] = e);
       return new Matrix(array, n, n);
     }
 
   /** Матрица сдвига вверх (верхне-сдвиговая матрица)
-    * @param {natural} dimension размерность
+    * @param {Natural} dimension размерность
     * @return {Matrix} матрица для операции сдвига
     */
     static shiftUp(dimension) {
@@ -820,7 +820,7 @@
     }
 
   /** Матрица сдвига вниз (нижне-сдвиговая матрица)
-    * @param {natural} dimension размерность
+    * @param {Natural} dimension размерность
     * @return {Matrix} матрица для операции сдвига
     */
     static shiftDown(dimension) {
@@ -833,7 +833,7 @@
     * @return {Matrix} размерность на 1 больше размерности вектора
     */
     static translate(vector) {
-      const n = vector.dimension + 1, column = n - 1;
+      const n = vector.dimension + 1; const column = n - 1;
       return Matrix.identity(n).fill(column * n, vector.data);
     }
 
@@ -934,7 +934,7 @@
     * @return {Matrix} матрица поворота
     */
     static rot(angle) {
-      const sin = Math.sin(angle), cos = Math.cos(angle);
+      const sin = Math.sin(angle); const cos = Math.cos(angle);
       return new Matrix([cos, sin, 0, -sin, cos, 0, 0, 0, 1], 3, 3);
     }
 
@@ -944,13 +944,13 @@
     * @return {Matrix} матрица поворота
     */
     static rotate(vector, angle) {
-      const q = Quatern.from(angle, vector),
-        xx = q.x * q.x, xy = q.x * q.y, xz = q.x * q.z, xw = q.x * q.w,
-        yy = q.y * q.y, yz = q.y * q.z, yw = q.y * q.w,
-        zz = q.z * q.z, zw = q.z * q.w, ww = q.w * q.w,
-          a = Vector.from(1 - 2 * (yy + zz),     2 * (xy + zw),     2 * (xz - yw)),
-          b = Vector.from(    2 * (xy - zw), 1 - 2 * (xx + zz),     2 * (yz + xw)),
-          c = Vector.from(    2 * (xz + yw),     2 * (yz - xw), 1 - 2 * (xx + yy));
+      const q = Quatern.from(angle, vector);
+        const xx = q.x * q.x; const xy = q.x * q.y; const xz = q.x * q.z; const xw = q.x * q.w;
+        const yy = q.y * q.y; const yz = q.y * q.z; const yw = q.y * q.w;
+        const zz = q.z * q.z; const zw = q.z * q.w; const ww = q.w * q.w;
+          const a = Vector.from(1 - 2 * (yy + zz),     2 * (xy + zw),     2 * (xz - yw));
+          const b = Vector.from(2 * (xy - zw), 1 - 2 * (xx + zz),     2 * (yz + xw));
+          const c = Vector.from(2 * (xz + yw),     2 * (yz - xw), 1 - 2 * (xx + yy));
       return  Matrix.from(a, b, c).resize(4, 4).set(3, 3, 1);
     }
 
@@ -997,8 +997,8 @@
     * @return {Matrix} итоговая матрица
     */
     static frustum(top, right, bottom, left, near, far) {
-      const a = right - left, b = top - bottom, c = far - near,
-          d = right + left, e = top + bottom, f = far + near;
+      const a = right - left; const b = top - bottom; const c = far - near;
+          const d = right + left; const e = top + bottom; const f = far + near;
       let M = Matrix.diagonal(Vector.from(2 * near / a, 2 * near / b, -f / c, 0));
       M = M.fill(8, new Float32Array([d / a, e / b]));
       M = M.set(3, 2, -1).set(2, 3, -2 * far * near / c);
@@ -1015,8 +1015,8 @@
     * @return {Matrix} итоговая матрица
     */
     static ortho(top, right, bottom, left, near, far) {
-      const a = right - left, b = top - bottom, c = far - near,
-            d = right + left, e = top + bottom, f = far + near;
+      const a = right - left; const b = top - bottom; const c = far - near;
+            const d = right + left; const e = top + bottom; const f = far + near;
       return Matrix.diagonal(Vector.from(2 / a, 2 / b, -2 / c, 1)).fill(12, [-d / a, -e / b, -f / c]);
     }
 
@@ -1039,9 +1039,9 @@
     * @return {Matrix} итоговая матрица
     */
     static lookAt(eye, center, up) {
-      const f = center.difference(eye).normalize(),
-            s = f.multiply(up).normalize(),
-            u = s.multiply(f);
+      const f = center.difference(eye).normalize();
+            const s = f.multiply(up).normalize();
+            const u = s.multiply(f);
       return Matrix.from(s, u, f.reverse()).transpose().resize(4, 4).set(3, 3, 1).translate(eye.reverse());
     }
 
@@ -1055,7 +1055,7 @@
     * @return {Matrix} матрица (3,3) для 2d трансформации
     */
     static transform2(a, b, c, d, e, f) {
-      const array = [a,b,0, c,d,0, e,f,1];
+      const array = [a, b, 0, c, d, 0, e, f, 1];
       return new Matrix(array, 3, 3);
     }
 
@@ -1066,8 +1066,8 @@
     * @return {Object#MatrixData} результат применения метода Гаусса
     */
     static gauss(matrix, w) {
-      const h = matrix.height, history = [];
-      let swap = 0, i = 0, j = 0, determinant = 1, k, column;
+      const h = matrix.height; const history = [];
+      let swap = 0; let i = 0; let j = 0; let determinant = 1; let k; let column;
       matrix = matrix.transpose();
       for (; i < w; ++i) {
         column = matrix.row(i); // re transpose

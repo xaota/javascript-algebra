@@ -1,15 +1,14 @@
 /** @description Алгебра: Векторы полезно для @2d и @3d [es6]
   * @author github.com/xaota
-  * @types
-  * * {integer} <-> {number} - целые числа
-  * * {natural} <-> {number} - натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
-  * * {percent} <-> {number} - число в промежутке [0, 1]
+  * @typedef {number} Integer целые числа
+  * @typedef {number} Natural натуральные числа и ноль, т.е., {unsigned int} // ноль не натуральное число
+  * @typedef {number} Percent число в промежутке [0, 1]
   * @todo Ещё гора чего не описана. +этим тегом помечаю кандидаты на оптимизацию, переписывание и т. д.
   * @feature Цепочные вызовы, типа `Vector.from(1,2,3).scale(2).reverse().normalize()`
   */
 
 /** {Vector} Работа с векторами @export @class
-  * @field {natural} dimension размерность вектора
+  * @field {Natural} dimension размерность вектора
   * @field {Float32Array} data координаты вектора
   */
   export default class Vector {
@@ -23,7 +22,7 @@
 
   /** @subsection @field Индексы вектора по осям */
   /** Вывод вектора в терминал @debug
-    * @param {natural} precision количество знаков после запятой в значениях элементов матрицы
+    * @param {Natural} precision количество знаков после запятой в значениях элементов матрицы
     * @return {string} @multiline
     */
     toString(precision = 2) {
@@ -83,8 +82,8 @@
     * @return {Object} список индексов и значений
     */
     symbol() {
-      const result = {}, n = Math.min(this.dimension, vectorIndex.length);
-      this.data.slice(0, n).forEach((e, i) => result[vectorIndex.charAt(i)] = e);
+      const result = {}; const n = Math.min(this.dimension, vectorIndex.length);
+      this.data.slice(0, n).forEach((e, i) => { result[vectorIndex.charAt(i)] = e });
       return result;
     }
 
@@ -223,7 +222,7 @@
     * @return {Vector} выровненный вектор
     */
     align(level = 1) {
-      const min = this.min(), max = this.max();
+      const min = this.min(); const max = this.max();
       level = (max - min) * level + min;
       return this.level(level);
     }
@@ -240,11 +239,11 @@
   /** Изменение размерности вектора @todo / resize
     * уменьшение - хвостовые значения отбрасываются
     * увеличение - координаты инициализируются нулями
-    * @param {natural} dimension размерность вектора
+    * @param {Natural} dimension размерность вектора
     * @return {Vector} вектор новой размерности
     */
     resize(dimension) {
-      const data = new Float32Array(dimension), n = Math.min(dimension, this.dimension);
+      const data = new Float32Array(dimension); const n = Math.min(dimension, this.dimension);
       for (let i = 0; i < n; ++i) data[i] = this.data[i];
       return new Vector(data);
     }
@@ -252,7 +251,7 @@
   /** Изменение размерности вектора c дополнением единицами / resizeIdentity
     * уменьшение - хвостовые значения отбрасываются
     * увеличение - координаты инициализируются единицами
-    * @param {natural} dimension размерность вектора
+    * @param {Natural} dimension размерность вектора
     * @return {Vector} вектор новой размерности
     */
     resizeIdentity(dimension) {
@@ -260,13 +259,13 @@
     }
 
   /** Заполнение координат вектора новыми значениями / fill
-    * @param {natural} index позиция первого из заменяемых элементов в списке координат
+    * @param {Natural} index позиция первого из заменяемых элементов в списке координат
     * @arguments {number} новые значения координат
     * @return {Vector} новый вектор с новыми значениями
     */
     fill(index, ...coord) {
       const data = this.data.slice();
-      coord.forEach((e, i) => data[index + i] = e);
+      coord.forEach((e, i) => { data[index + i] = e });
       return new Vector(data);
     }
 
@@ -343,7 +342,7 @@
     * @return {Vector} результат умножения
     */
     multiply(vector) {
-      const A = this, B = vector;
+      const A = this; const B = vector;
       const a = Vector.from(A.z * B.y, A.x * B.z, A.y * B.x);
       const b = Vector.from(A.y * B.z, A.z * B.x, A.x * B.y);
       return Vector.to(a, b);
@@ -406,7 +405,7 @@
     }
 
   /** Нулевой (пустой) вектор любой размерности / empty @static
-    * @param {natural} dimension размерность вектора
+    * @param {Natural} dimension размерность вектора
     * @return {Vector} нулевой вектор
     */
     static empty(dimension = 2) {
@@ -414,7 +413,7 @@
     }
 
   /** Вектор любой размерности, все элементы которого одинаковые / identity @static
-    * @param {natural} dimension размерность вектора
+    * @param {Natural} dimension размерность вектора
     * @param {number} value значение элементов вектора
     * @return {Vector} вектор с единиичными компонентами
     */
@@ -423,8 +422,8 @@
     }
 
   /** Единичный (базисный) вектор любой размерности / basis @static
-    * @param {natural} dimension размерность вектора
-    * @param {natural} index     номер единичной координаты
+    * @param {Natural} dimension размерность вектора
+    * @param {Natural} index     номер единичной координаты
     * @return {Vector} кроме index все координаты будут нулевыми
     */
     static basis(dimension, index) {
@@ -469,11 +468,11 @@
     }
 
   /** Вектор случайных значений / random @static
-    * @param {natural} dimension размерность итогового вектора
+    * @param {Natural} dimension размерность итогового вектора
     * @return {Vector} истоговый вектор с значениями [0, 1)
     */
     static random(dimension = 2) {
-      const array = Array.from({length: dimension}, _ => Math.random());
+      const array = Array.from({ length: dimension }, _ => Math.random());
       return new Vector(array);
     }
 
@@ -502,20 +501,22 @@
     * @return {Vector} вектор нормали
     */
     static normal(a, b, c) {
-      const A = Vector.to(b, a),
-            B = Vector.to(b, c);
+      const A = Vector.to(b, a);
+            const B = Vector.to(b, c);
       return A.multiply(B).normalize().reverse();
     }
 
   /** Сумма нескольких векторов / addition @static
-    * @param {natural} dimension размерность складываемых векторов
-    * @param {...Vector} слагаемые векторы размерности dimension
+    * @param {Natural} dimension размерность складываемых векторов
+    * @param {...Vector} vectors слагаемые векторы размерности dimension
     * @return {Vector} вектор суммы
     */
     static addition(dimension = 0, ...vectors) {
-      if (vectors.length === 0) return dimension > 0
-        ? Vector.empty(dimension)
-        : null;
+      if (vectors.length === 0) {
+        return dimension > 0
+          ? Vector.empty(dimension)
+          : null;
+      }
       const head = vectors[0];
       const tail = vectors.slice(1);
       return tail.reduce((result, vector) => result.addition(vector), head);
@@ -536,7 +537,7 @@
     Vector.y        = Vector.basis(2, 1);
     Vector.zero     = Vector.empty(2);
     Vector.flipX    = Vector.from(-1,  1);
-    Vector.flipY    = Vector.from( 1, -1);
+    Vector.flipY    = Vector.from(1, -1);
     Vector.one      = Vector.identity(2);
     Vector.half     = Vector.from(0.5, 0.5);
     Vector.infinity = Vector.from(Infinity, Infinity);
@@ -546,8 +547,8 @@
     Vector.Z        = Vector.basis(3, 2);
     Vector.ZERO     = Vector.empty(3);
     Vector.FlipX    = Vector.from(-1,  1,  1);
-    Vector.FlipY    = Vector.from( 1, -1,  1);
-    Vector.FlipZ    = Vector.from( 1,  1, -1);
+    Vector.FlipY    = Vector.from(1, -1,  1);
+    Vector.FlipZ    = Vector.from(1,  1, -1);
     Vector.ONE      = Vector.identity(3);
     Vector.HALF     = Vector.from(0.5, 0.5, 0.5);
     Vector.INFINITY = Vector.from(Infinity, Infinity, Infinity);
