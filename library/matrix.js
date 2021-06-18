@@ -16,8 +16,9 @@
   */
 
 /** @section @imports */
-  import Vector  from './vector.js';
-  import Quatern from './quatern.js';
+  import Arr from 'javascript-std-lib/library/array.js';
+  import Vector  from './Vector.js';
+  import Quatern from './Quatern.js';
 
 /** @section {Matrix} Работа с матрицами @export @class
   * @field height {Natural} количество строк    (высота)
@@ -1055,8 +1056,19 @@
     * @return {Matrix} матрица (3,3) для 2d трансформации
     */
     static transform2(a, b, c, d, e, f) {
-      const array = [a, b, 0, c, d, 0, e, f, 1];
+      const array = new Float32Array([a, b, 0, c, d, 0, e, f, 1]);
       return new Matrix(array, 3, 3);
+    }
+
+  /** Матрица изометрической проекции / isometric @static @2D
+    * @param {number} iso коэффициент изометрии
+    * @param {Vector} offset сдвиг
+    * @return {Matrix} матрица для изометрического преобразования
+    */
+    static isometric(iso = 2, offset = Vector.zero) {
+      const scale = 1 / iso;
+      const angle = Math.sqrt(1 - scale * scale);
+      return Matrix.transform2(angle, -scale, angle, scale, offset.x, offset.y);
     }
 
   /** Применение метода Гаусса
@@ -1067,7 +1079,7 @@
     */
     static gauss(matrix, w) {
       const h = matrix.height; const history = [];
-      let swap = 0; let i = 0; let j = 0; let determinant = 1; let k; let column;
+      let swaps = 0; let i = 0; let j = 0; let determinant = 1; let k; let column;
       matrix = matrix.transpose();
       for (; i < w; ++i) {
         column = matrix.row(i); // re transpose
@@ -1077,8 +1089,8 @@
           for (k = j + 1; k < h; ++k) {
             if (column[k] !== 0) {
               matrix = matrix.swapCol(j, k);
-              swap(column, j, k);
-              ++swap; // число перестановок строк
+              Arr.swap(column.data, j, k);
+              ++swaps; // число перестановок строк
               history.push(['swap', j, k]);
               break;
             }
@@ -1098,12 +1110,12 @@
         ++j;
       }
       return {
-        determinant: swap % 2 ? -determinant : determinant,
+        determinant: swaps % 2 ? -determinant : determinant,
         matrix     : matrix.transpose(),
         width      : w,
         rank       : j,
         history,
-        swap
+        swaps
       }
     }
 
