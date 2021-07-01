@@ -144,6 +144,32 @@
         : A.x < x && A.y < y && A.z < z && B.x > x && B.y > y && B.z > z;
     }
 
+  /** Находится ли точка в прямоугольной области, ограничивающую текущий вектор / has2D
+    * @param {Vector} point координаты проверямой точки
+    * @param {boolean} edges? включать ли внешние границы
+    * @return {boolean} Vector.zero <= point (edges ? <= : <) vector
+    */
+    has2D(point, edges = false) {
+      const zero = point.x >= 0 && point.y >= 0;
+      if (!zero) return false;
+      return edges
+        ? point.x <= this.x && point.y <= this.y
+        : point.x < this.x && point.y < this.y;
+    }
+
+  /** Находится ли точка в прямоугольной области, ограничивающую текущий вектор / has3D
+    * @param {Vector} point координаты проверямой точки
+    * @param {boolean} edges? включать ли внешние границы
+    * @return {boolean} Vector.zero <= point (edges ? <= : <) vector
+    */
+    has3D(point, edges = false) {
+      const zero = point.x >= 0 && point.y >= 0 && point.z >= 0;
+      if (!zero) return false;
+      return edges
+        ? point.x <= this.x && point.y <= this.y && point.z <= this.z
+        : point.x < this.x && point.y < this.y && point.z < this.z;
+    }
+
   /** Норма вектора / norm
     * @return {number} значение нормы вектора
     */

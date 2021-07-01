@@ -702,6 +702,14 @@
       return Matrix.transitionInverse3D(this, vector);
     }
 
+  /** Перевод точек из одной СК окружения пера в другую через матрицу перехода / transition2D @2D
+    * @param {Vector} vector изначальные координаты (x, y)
+    * @return {Vector} координаты в новой СК
+    */
+    transition2D(vector) {
+      return Matrix.transition2D(this, vector);
+    }
+
   /** @subsection @method @static */
   /** Сравнение двух матриц
     * @param {Matrix} A сравниваемые матрицы
@@ -1018,7 +1026,7 @@
     static ortho(top, right, bottom, left, near, far) {
       const a = right - left; const b = top - bottom; const c = far - near;
             const d = right + left; const e = top + bottom; const f = far + near;
-      return Matrix.diagonal(Vector.from(2 / a, 2 / b, -2 / c, 1)).fill(12, [-d / a, -e / b, -f / c]);
+      return Matrix.diagonal(Vector.from(2 / a, 2 / b, -2 / c, 1)).fill(12, new Float32Array([-d / a, -e / b, -f / c]));
     }
 
   /** Матрица симметричной перспективной проекции
@@ -1128,6 +1136,15 @@
       return matrix.vectorCol(vector).vector();
     }
 
+  /** Перевод точек из одной СК окружения пера в другую через матрицу перехода / transition2D @static @2D
+    * @param {Matrix} matrix матрица СК
+    * @param {Vector} vector изначальные координаты
+    * @return {Vector} координаты в новой СК
+    */
+    static transition2D(matrix, vector) {
+      return Matrix.transition(matrix, vector.resize(3).fill(2, 1)).resize(2);
+    }
+
   /** Применение преобразований (вектор -> вектор) (через обратную матрицу) / transitionInverse @slow
     * @param {Matrix} matrix матрица СК
     * @param {Vector} vector изначальные координаты
@@ -1137,7 +1154,7 @@
       return Matrix.transition(matrix.inverse(), vector);
     }
 
-  /** Применение преобразований (вектор -> вектор) (через обратную матрицу @3D) / transitionInverse3D @slow
+  /** Применение преобразований (вектор -> вектор) (через обратную матрицу @3D) / transitionInverse3D @slow @3D
     * @param {Matrix} matrix матрица СК
     * @param {Vector} vector изначальные координаты
     * @return {Vector} координаты в новой СК

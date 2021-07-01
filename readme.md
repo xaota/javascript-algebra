@@ -35,7 +35,7 @@ $ npm install javascript-algebra
 ## Использование
 
 ```javascript
-import {Vector, Quatern, Matrix} from 'javascript-algebra';
+import { Vector, Quatern, Matrix } from 'javascript-algebra';
 
 Vector
   .from(1, 2, 3) // -> Vector @3d {x: 1,  y: 0,  z: 0}
@@ -131,11 +131,13 @@ const vector = vector.multiplication(vector) // Покомпонентное у�
 /** Основные методы 2D */
 const vector = vector.rotate2D(angle)      // Вращение вектора
 const bool = vector.in2D(vectorA, vectorB) // попадение в ориентированный прямоугольник
+const bool = vector.has2D(point)           // наличие point в прямоугольнике [0, vector]
 
 /** Основные методы 3D */
 const vector = vector.multiply(vector)     // Векторное умножение (при размерности 3)
 const vector = vector.rotate3D()           // TODO: нет пока такого метода
 const bool = vector.in3D(vectorA, vectorB) // попадение в ориентированный параллепипед
+const bool = vector.has3D(point)           // наличие point в параллепипеде [0, ...vector]
 
 /** Основные методы (с приведением размерностей) */
 const vector = vector.add(vector)          // Сложение векторов (с приведением размерностей)
@@ -280,6 +282,7 @@ const matx = matrix.mult(M) // Умножение матриц с с предв�
 /** 2D */
 const matx = matrix.rot(angle)   // Операция поворота координат
 const matx = matrix.skew(vector) // Операция искажения (extended)
+const vec = matrix.transition2D(vector) // Перевод точек из одной СК окружения пера в другую через матрицу перехода
 
 /** 3D */
 const matx = matrix.rotate(vector, angle) // Операция поворота координат
@@ -354,6 +357,7 @@ const matx = matrix.additionRows(a, b, factor) // Добавление к стр
 
 /** Преобразования векторов через матрицы */
 const vec = Matrix.transition(matrix, vector)          // перевод системы координат
+const vec = Matrix.transition2D(matrix, vector)        // Перевод точек из одной СК окружения пера в другую через матрицу перехода
 const vec = Matrix.transitionInverse(matrix, vector)   //
 const vec = Matrix.transitionInverse3D(matrix, vector) //
 ```
