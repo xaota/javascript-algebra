@@ -283,6 +283,33 @@
       return new Matrix(array, h, w);
     }
 
+  /** */
+    get2() {
+      const a = this.get(0, 0);
+      const b = this.get(0, 1);
+      const c = this.get(1, 0);
+      const d = this.get(1, 1);
+
+      return { a, b, c, d };
+    }
+
+  /** */
+    get3() {
+      const a = this.get(0, 0);
+      const b = this.get(0, 1);
+      const c = this.get(0, 2);
+
+      const d = this.get(1, 0);
+      const e = this.get(1, 1);
+      const f = this.get(1, 2);
+
+      const g = this.get(2, 0);
+      const h = this.get(2, 1);
+      const i = this.get(2, 2);
+
+      return { a, b, c, d, e, f, g, h, i };
+    }
+
   /** Замена столбца в матрице на значения из вектора
     * @param {Natural} index номер столбца
     * @param  {Vector} vector вектор, который станет столбцом
@@ -538,6 +565,24 @@
       return new Matrix(matrix, h, w);
     }
 
+  /** Обратная матрица 2x2 */
+    inverse2() {
+      const { a, b, c, d } = this.get2();
+      const determinant = this.determinant2();
+      const array = new Float32Array([d, -c, -b, a]);
+      return new Matrix(array, 2, 2).dot(1 / determinant);
+    }
+
+  /** Обратная матрица 3x3 */
+    inverse3() {
+      return this.cofactors3().dot(1 / this.determinant3());
+    }
+
+  /** */
+    inverse2D() {
+      return this.inverse3();
+    }
+
   /** Обратная матрица к матрице модели для @3d графики
     * @return {Matrix} обратная матрица
     */
@@ -546,11 +591,49 @@
       return this.minor(3, 3).transpose().resize(4, 4).set(3, 3, 1).translate(translate);
     }
 
+  /** / cofactors3 M' - Присоединённая матрица (Adjugate matrix) */
+    cofactors3() {
+      const { a, b, c, d, e, f, g, h, i } = this.get3();
+      const array = new Float32Array([
+        e * i - f * h,
+        c * h - b * i,
+        b * f - c * e,
+
+        f * g - d * i,
+        a * i - c * g,
+        c * d - a * f,
+
+        d * h - e * g,
+        b * g - a * h,
+        a * e - b * d
+      ]);
+
+      return new Matrix(array, 3, 3);
+    }
+
   /** Определитель матрицы (методом Гаусса)
     * @return {number} значение определителя
     */
     determinant() {
       return Matrix.gauss(this, this.width).determinant;
+    }
+
+  /** Определитель матрицы 2x2
+    * @return {number} значение определителя
+    * @info det A = |A| = ad - bc
+    */
+    determinant2() {
+      const { a, b, c, d } = this.get2();
+      return a * d - b * c;
+    }
+
+  /** Определитель матрицы 3x3
+    * @return {number} значение определителя
+    * @info det A = |A| = a(ei − fh) − b(di − fg) + c(dh − eg)
+    */
+    determinant3() {
+      const { a, b, c, d, e, f, g, h, i } = this.get3();
+      return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
     }
 
   /** Ранг матрицы (методом Гаусса)
