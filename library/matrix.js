@@ -1162,6 +1162,9 @@
       return Matrix.transform2(angle, -scale, angle, scale, offset.x, offset.y);
     }
 
+  // the rotation matrix for isometric view build by multiplying the rotations
+  // Mat3x3 matIso = Mat3x3(InitRotX, degToRad(30.0)) * Mat3x3(InitRotY, degToRad(45.0));
+
   /** Применение метода Гаусса
     * @param {Matrix} matrix левая часть системы уравнений Ax = B с матрицей A и вектором B @required
     * @param {number} w количество столбцов матрицы

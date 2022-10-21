@@ -1,13 +1,14 @@
 {
   "name": "javascript-algebra",
   "version": "1.10.8",
-  "description": "Алгебраические методы для матриц, векторов и кватернионов",
+  "description": "Алгебраические методы для матриц, векторов, кватернионови так далее",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "./node_modules/eslint/bin/eslint.js .",
-    "clear": "rm -rf node_modules package-lock.json"
+    "lint": "./node_modules/eslint/bin/eslint.js index.js library",
+    "clear": "rm -rf node_modules package-lock.json",
+    "development": "npm link javascript-std-lib"
   },
   "repository": {
     "type": "git",
@@ -35,10 +36,8 @@
   },
   "homepage": "https://github.com/xaota/javascript-algebra#readme",
   "devDependencies": {
-    "@babel/eslint-parser": "^7.18.9",
-    "@types/node": "^18.7.13",
-    "eslint": "^8.22.0",
-    "eslint-config-standard": "^17.0.0"
+    "@types/node": "^18.11.3",
+    "eslint": "^8.25.0"
   },
   "dependencies": {
     "javascript-std-lib": "latest"
