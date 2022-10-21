@@ -1,6 +1,6 @@
 {
   "name": "javascript-algebra",
-  "version": "1.10.8",
+  "version": "1.10.11",
   "description": "Алгебраические методы для матриц, векторов, кватернионови так далее",
   "main": "index.js",
   "type": "module",

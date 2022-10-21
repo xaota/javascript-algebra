@@ -5,6 +5,7 @@
   * @typedef {number} Percent число в промежутке [0, 1]
   * @todo Ещё гора чего не описана. +этим тегом помечаю кандидаты на оптимизацию, переписывание и т. д.
   * @feature Цепочные вызовы, типа `Vector.from(1,2,3).scale(2).reverse().normalize()`
+  * @imutable
   */
 
 /** {Vector} Работа с векторами @export @class
